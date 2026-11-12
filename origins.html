@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where people come from · Husky Explorer</title>
+<link rel="stylesheet" href="/husky-explorer-census/style.css">
+<link rel="stylesheet" href="/husky-explorer-census/compare.css">
+</head>
+<body class="compare">
+<header>
+  <a class="brand" href="/husky-explorer-census/" aria-label="Husky Explorer home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#c8102e"/><path d="M16 6.5 25.5 12 16 17.5 6.5 12z" fill="#fff"/><path d="m6.5 16.5 9.5 5.5 9.5-5.5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".8"/><path d="m6.5 21 9.5 5.5L25.5 21" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/></svg>
+    <b>Husky <span>Explorer</span></b>
+  </a>
+  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html">Place profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html" aria-current="page">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
+</header>
+<div id="page">
+  <section id="controls">
+    <h2>Place</h2>
+    <label>State <select id="state"></select></label>
+    <label>County <select id="county"></select></label>
+    <p class="note">Foreign-born residents by country of birth, for a county or for a whole state.</p>
+    <p id="status" role="status"></p>
+  </section>
+  <section id="report">
+    <h2 id="title">Countries of birth</h2>
+    <div id="born"></div>
+    <h2>Refugees and asylum-seekers in the United States</h2>
+    <p class="note" id="unhcr-note"></p>
+    <div id="refugees"></div>
+    <div id="notices">
+      <p>This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.</p>
+      <p>Countries of birth: U.S. Census Bureau, American Community Survey 5-year 2020–2024, table B05006. Margins of error are at the 90 percent confidence level; small groups have wide margins, and a whole state adds its counties’ margins by the Bureau’s rule for sums.</p>
+      <p>Refugees and asylum-seekers: UNHCR Refugee Population Statistics Database (api.unhcr.org/population/v1), CC BY 4.0. These are people under UNHCR’s mandate counted by country of origin, not all immigrants, and the national figures are not broken down by place within the United States.</p>
+    </div>
+  </section>
+</div>
+<script type="module" src="/husky-explorer-census/origins.js"></script>
+</body>
+</html>

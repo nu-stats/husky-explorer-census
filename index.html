@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Husky Explorer</title>
+<link rel="stylesheet" href="/husky-explorer-census/vendor/ol.css">
+<link rel="stylesheet" href="/husky-explorer-census/style.css">
+</head>
+<body>
+<header>
+  <a class="brand" href="/husky-explorer-census/" aria-label="Husky Explorer home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#c8102e"/><path d="M16 6.5 25.5 12 16 17.5 6.5 12z" fill="#fff"/><path d="m6.5 16.5 9.5 5.5 9.5-5.5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".8"/><path d="m6.5 21 9.5 5.5L25.5 21" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/></svg>
+    <b>Husky <span>Explorer</span></b>
+  </a>
+  <nav><a href="/husky-explorer-census/" aria-current="page">Map</a><a href="/husky-explorer-census/profile.html">Place profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
+</header>
+<main>
+  <div id="stage">
+    <div id="map" role="application" aria-label="Map of the chosen state"></div>
+    <section id="tour-card" class="card" hidden aria-live="polite">
+      <div class="note" id="tour-count"></div>
+      <h2 id="tour-title"></h2>
+      <p id="tour-caption"></p>
+      <p id="tour-remark" class="note"></p>
+      <div class="buttons"><button type="button" id="tour-prev">Back</button><button type="button" id="tour-next" class="primary">Next</button><button type="button" id="tour-close" class="link">Close</button></div>
+    </section>
+    <div class="float">
+      <section id="ask" class="card">
+        <h2>Explore</h2>
+        <p class="lead">What do you want to see?</p>
+        <form id="ask-form">
+          <input id="ask-text" type="text" autocomplete="off" aria-label="What data do you want?" placeholder="Obesity in Suffolk County">
+          <button type="submit">Ask</button>
+        </form>
+        <div class="chips" aria-label="Examples">
+          <button type="button" class="chip" data-ask="Obesity in Suffolk County">Obesity in Suffolk County</button>
+          <button type="button" class="chip" data-ask="Median household income by tract in Middlesex County">Income by tract</button>
+          <button type="button" class="chip" data-ask="Population change since 2010">Growth since 2010</button>
+          <button type="button" class="chip" data-ask="Life expectancy">Life expectancy</button>
+        </div>
+        <p class="note">Say it in plain words, or <button type="button" id="ask-menus" class="link">use the menus</button>. Nothing is drawn until you say yes.</p>
+        <div id="ask-card" hidden></div>
+      </section>
+      <section id="controls" class="card">
+        <h2>Map</h2>
+        <label>Showing <select id="measure"></select></label>
+        <details id="multi" open>
+          <summary>Pick several measures for a report</summary>
+          <p class="note">Click shows one on the map. Ctrl-click (Cmd-click on a Mac) adds or removes one; Shift-click takes everything from the last click. Arrow keys, Space and Ctrl+A work too.</p>
+          <div id="measure-list" class="pick-list" aria-label="Measures"></div>
+          <p><span id="map-pick-count" class="note"></span> <a id="map-report" href="/husky-explorer-census/report.html">Build a report from the picked measures</a></p>
+        </details>
+        <div class="pair">
+          <label>State <select id="state"></select></label>
+          <label>Areas
+            <select id="level">
+              <option value="auto">Auto (by zoom)</option>
+              <option value="county">Counties</option>
+              <option value="cousub">Towns and townships</option>
+              <option value="place">Cities and places</option>
+              <option value="zcta">ZIP code areas</option>
+              <option value="tract">Tracts</option>
+              <option value="blockgroup">Block groups</option>
+            </select>
+          </label>
+        </div>
+        <div class="pair">
+          <label>Classes
+            <select id="method">
+              <option value="natural-breaks">Natural breaks</option>
+              <option value="quantile">Quantile</option>
+              <option value="equal-interval">Equal interval</option>
+            </select>
+          </label>
+          <label>Number <select id="count"><option>3</option><option>4</option><option selected>5</option><option>6</option><option>7</option></select></label>
+        </div>
+        <label class="check"><input type="checkbox" id="basemap" checked> Street map underneath <span class="note">(asks OpenStreetMap for map tiles)</span></label>
+      </section>
+      <section id="legend" class="card" aria-live="polite"></section>
+    </div>
+  </div>
+  <aside>
+    <section id="hover" class="card" aria-live="polite">Point at an area to see its value.</section>
+    <section id="detail" class="card"><h2>Details</h2><p>Click an area to see every measure for it, with margins of error.</p></section>
+    <details id="radius" class="card">
+      <summary>Around a point</summary>
+      <p class="note">Totals for the people within a distance of a point you click, from the smallest areas built for this state.</p>
+      <label>Distance
+        <select id="radius-miles"><option value="1">1 mile</option><option value="2" selected>2 miles</option><option value="5">5 miles</option><option value="10">10 miles</option><option value="25">25 miles</option></select>
+      </label>
+      <p><button type="button" id="radius-pick">Pick a point on the map</button> <button type="button" id="radius-clear" class="link">Clear</button></p>
+      <div id="radius-result" aria-live="polite"></div>
+    </details>
+    <details id="points" class="card">
+      <summary>Places on the map</summary>
+      <p class="note">Dots for things that are not census areas. Point at one to read about it.</p>
+      <div id="points-list"></div>
+      <div id="points-legend" class="legend-rows"></div>
+      <div id="points-notices"></div>
+    </details>
+    <details id="download" class="card">
+      <summary>Download this map's data</summary>
+      <p class="note">Every area at the level on the map, with the value it is colored by.</p>
+      <p><button type="button" id="dl-csv">CSV</button> <button type="button" id="dl-xlsx">Excel</button> <button type="button" id="dl-geojson">GeoJSON (shapes and values)</button></p>
+      <h3>Open in another Craft</h3>
+      <p class="note">Husky Explorer can hand this map to another Craft on this computer. Open that Craft, copy the address from its window, and paste it here. Nothing leaves the computer.</p>
+      <label>Send to <select id="send-to"><option value="mapcraft">MapCraft</option><option value="hev">Husky Eye View</option><option value="mergecraft">MergeCraft</option></select></label>
+      <label>Its address <input id="send-address" type="text" autocomplete="off" placeholder="http://127.0.0.1:4320/"></label>
+      <label>Send as <select id="send-as"><option value="layer">Shapes with values</option><option value="table">Table</option></select></label>
+      <p><button type="button" id="send-go">Open it there</button></p>
+      <p class="note">StatCraft and RCraft take a file for now:</p>
+      <p><button type="button" id="dl-dta">Stata file (.dta)</button> <button type="button" id="dl-r">R script</button></p>
+      <p id="send-status" class="note" role="status" aria-live="polite"></p>
+    </details>
+    <details id="regions" class="card">
+      <summary>Custom regions</summary>
+      <p class="note">Pick whole areas (tracts, towns, ZIP code areas) by clicking them or by drawing a shape, name the set, and get one report for it. Regions stay in this browser; save them to a file to share.</p>
+      <p><button type="button" id="region-pick">Pick areas by clicking</button> <button type="button" id="region-draw">Draw a shape to pick areas</button> <button type="button" id="region-clear" class="link">Clear</button></p>
+      <p id="region-selection" class="note" aria-live="polite">Nothing picked yet.</p>
+      <label>Name <input id="region-name" type="text" maxlength="80" autocomplete="off" placeholder="North end"></label>
+      <p><button type="button" id="region-save">Save this region</button></p>
+      <ul id="region-list" class="plain"></ul>
+      <p><button type="button" id="regions-save-file" class="link">Save regions to a file</button> <label class="link">Open a regions file <input id="regions-open" type="file" accept=".json,application/json,.zip,.gz,.tgz,.bz2,.tbz2,.tbz,.xz,.txz,.zst,.tzst,.tar"></label></p>
+      <p id="region-status" class="note" role="status" aria-live="polite"></p>
+      <div id="region-report"></div>
+    </details>
+    <details id="notes" class="card">
+      <summary>Notes and tours <span id="notes-summary" class="note"></span></summary>
+      <p class="note">Pin a note on the map, or save the view you are looking at as a stop in a tour. They stay in this browser; save the notebook to a file to share it.</p>
+      <label>Note <input id="note-text" type="text" maxlength="500" autocomplete="off" placeholder="What is worth seeing here?"></label>
+      <p><button type="button" id="note-place">Pin it on the map</button></p>
+      <ul id="note-list" class="plain"></ul>
+      <label>Stop title <input id="stop-title" type="text" maxlength="80" autocomplete="off" placeholder="Income by tract"></label>
+      <label>Caption <input id="stop-caption" type="text" maxlength="600" autocomplete="off" placeholder="Why this view matters"></label>
+      <p><button type="button" id="stop-add">Add this view as a stop</button></p>
+      <ol id="stop-list" class="plain"></ol>
+      <p><button type="button" id="tour-play" disabled>Play the tour</button> <button type="button" id="tour-pdf" disabled>Print or save as PDF</button></p>
+      <p><button type="button" id="notes-save">Save notebook</button> <button type="button" id="notes-clear" class="link">Clear all</button></p>
+      <label>Open a saved notebook <input id="notes-open" type="file" accept=".json,application/json,.zip,.gz,.tgz,.bz2,.tbz2,.tbz,.xz,.txz,.zst,.tzst,.tar"></label>
+      <p id="notes-status" class="note" role="status" aria-live="polite"></p>
+    </details>
+    <details id="upload" class="card">
+      <summary>Your own data</summary>
+      <p class="note">Choose a CSV. The match assistant works out what its rows are (counties, towns, ZIP code areas, tracts) from IDs, IDs in parts, ZIP codes or names, and says what it found. Its number columns appear under “Your file” in the Map menu. The file stays in your browser.</p>
+      <input id="upload-file" type="file" accept=".csv,text/csv,.zip,.gz,.tgz,.bz2,.tbz2,.tbz,.xz,.txz,.zst,.tzst,.tar" aria-label="CSV file to match to census areas">
+      <button type="button" id="upload-clear" class="link">Remove</button>
+      <div id="upload-detect" aria-live="polite"></div>
+      <div id="upload-report" aria-live="polite"></div>
+      <p><button type="button" id="upload-download" hidden>Download the rows that did not match</button></p>
+      <details id="upload-recipe" hidden>
+        <summary>How your file was matched (for a methods note)</summary>
+        <pre id="upload-recipe-text" class="recipe"></pre>
+        <p><button type="button" id="upload-recipe-copy">Copy</button></p>
+      </details>
+      <details id="aggregate" hidden>
+        <summary>Show it at a larger level (aggregation assistant)</summary>
+        <p id="aggregate-say" class="note"></p>
+        <div id="aggregate-controls">
+          <label>Show as <select id="aggregate-level"></select></label>
+          <div id="aggregate-columns"></div>
+          <p><button type="button" id="aggregate-make">Add it up</button> <button type="button" id="aggregate-undo" class="link">Back to the original level</button></p>
+        </div>
+        <div id="aggregate-result" aria-live="polite"></div>
+      </details>
+      <details id="upload-checklist">
+        <summary>Before you match: four questions</summary>
+        <ol class="note">
+          <li><strong>What is each row?</strong> A county, a town, a ZIP code area, a tract? Pick from the level card below.</li>
+          <li><strong>What identifies it?</strong> A census ID, the ID in parts (state, county, tract), a ZIP code, or a name.</li>
+          <li><strong>Whose boundaries?</strong> Tracts and block groups were redrawn in 2020; a file from before has some that no longer exist.</li>
+          <li><strong>Which state?</strong> Names and ZIP codes are matched in the state chosen on the map: the same name exists in many states.</li>
+        </ol>
+      </details>
+      <details id="level-guide-box">
+        <summary>Level card: what each level is</summary>
+        <div id="level-guide"></div>
+      </details>
+    </details>
+  </aside>
+</main>
+<footer>
+  <p>This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.</p>
+  <details id="notices">
+    <summary>Data sources and credits</summary>
+    <p>Health measures: Centers for Disease Control and Prevention, PLACES 2025 release (public domain). These are modeled small-area estimates of the percent of adults, not counts.</p>
+    <p>Change since 2010: U.S. Census Bureau, 2010 and 2020 Censuses. County values compare the two counts directly; tract values are estimates made by carrying 2010 counts onto 2020 tracts through the Census Bureau’s block relationship files (method after Logan, Xu and Stults 2014).</p>
+    <p>Life expectancy: National Center for Health Statistics, U.S. Small-area Life Expectancy Estimates Project (USALEEP), 2010–2015, on 2010 tract boundaries; tracts redrawn since then have no value.</p>
+    <p>Environment: Centers for Disease Control and Prevention, National Environmental Public Health Tracking Network (www.cdc.gov/ephtracking). Air quality is the EPA Downscaler model, a 2022 average; park access is 2020. Interpretations here are not CDC’s.</p>
+    <p>Street map: © OpenStreetMap contributors (openstreetmap.org/copyright), shown faded under the data and optional; turning it off stops all requests to OpenStreetMap.</p>
+    <p>Boundaries: U.S. Census Bureau, 2024 cartographic boundary files (1:500,000), and 2010 cartographic boundary files for the 2010 census; water-only tracts are not drawn. Colors from ColorBrewer (Brewer, Harrower and Penn State). Margins of error are at the 90 percent confidence level.</p>
+  </details>
+</footer>
+<script src="/husky-explorer-census/vendor/ol.js"></script>
+<script type="module" src="/husky-explorer-census/map.js"></script>
+</body>
+</html>

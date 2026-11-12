@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commuting · Husky Explorer</title>
+<link rel="stylesheet" href="/husky-explorer-census/style.css">
+<link rel="stylesheet" href="/husky-explorer-census/compare.css">
+<link rel="stylesheet" href="/husky-explorer-census/commute.css">
+</head>
+<body class="compare">
+<header>
+  <a class="brand" href="/husky-explorer-census/" aria-label="Husky Explorer home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#c8102e"/><path d="M16 6.5 25.5 12 16 17.5 6.5 12z" fill="#fff"/><path d="m6.5 16.5 9.5 5.5 9.5-5.5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".8"/><path d="m6.5 21 9.5 5.5L25.5 21" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/></svg>
+    <b>Husky <span>Explorer</span></b>
+  </a>
+  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html">Place profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html" aria-current="page">Commuting</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
+</header>
+<div id="page">
+  <section id="controls">
+    <h2>Home county</h2>
+    <label>State <select id="state"></select></label>
+    <label>County <select id="county"></select></label>
+    <p class="note">Where the people who live in a county go to work. Lines are drawn from the county’s center to the counties that employ its residents; thicker means more jobs.</p>
+    <p id="status" role="status"></p>
+  </section>
+  <section id="report">
+    <h2 id="title">Where residents work</h2>
+    <p id="summary"></p>
+    <div id="flow-map"></div>
+    <div id="destinations"></div>
+    <div id="notices">
+      <p>This product uses Census Bureau data but is not endorsed or certified by the Census Bureau.</p>
+      <p>U.S. Census Bureau, LEHD Origin-Destination Employment Statistics (LODES8), all jobs, 2023, added up from blocks to counties. Jobs covered by state unemployment insurance records and federal jobs; the self-employed are not counted. A job is placed at the home and work addresses on file, which can be an employer’s headquarters rather than where the person works. Only the 25 largest destinations are kept. Alaska, Michigan and Puerto Rico have no 2023 file. Lines join county centers and are not routes. Connecticut’s old counties are named but not drawn: the map uses the planning regions that replaced them.</p>
+    </div>
+  </section>
+</div>
+<script type="module" src="/husky-explorer-census/commute.js"></script>
+</body>
+</html>

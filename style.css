@@ -1,0 +1,212 @@
+/* Husky Explorer: one look for every page. Floating cards over a full-bleed map; calm neutrals with a husky red accent. */
+:root {
+  --bg: #f2f5f9;
+  --card: #ffffff;
+  --panel: #f4f6fa;
+  --text: #15202f;
+  --muted: #5b687a;
+  --line: #e2e7ef;
+  --accent: #c8102e;
+  --accent-soft: #fdecef;
+  --ink: #0f1b2d;
+  --water: #d6e3ee;
+  --dots: #c3d3e1;
+  --shadow: 0 1px 2px rgba(15, 27, 45, 0.06), 0 8px 28px rgba(15, 27, 45, 0.12);
+  --radius: 14px;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c1118;
+    --card: #151c27;
+    --panel: #1b2431;
+    --text: #e8ecf2;
+    --muted: #9aa6b6;
+    --line: #263041;
+    --accent: #ff5d6e;
+    --accent-soft: #3a1a21;
+    --ink: #e8ecf2;
+    --water: #101a26;
+    --dots: #1b2838;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 28px rgba(0, 0, 0, 0.5);
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+a { color: var(--accent); }
+
+/* Header: brand, pages */
+header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  z-index: 20;
+}
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.brand svg { width: 32px; height: 32px; flex: none; }
+.brand b { font-size: 1.15rem; letter-spacing: -0.01em; }
+.brand span { color: var(--accent); }
+nav { display: flex; gap: 4px; font-size: 0.9rem; }
+nav a { color: var(--muted); text-decoration: none; padding: 7px 14px; border-radius: 999px; font-weight: 500; }
+nav a:hover { background: var(--panel); color: var(--text); }
+nav a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+
+h1 { margin: 0; font-size: 1.2rem; }
+h2 { margin: 0 0 8px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 700; }
+label { color: var(--muted); font-size: 0.8rem; display: grid; gap: 4px; font-weight: 500; }
+select, input[type="text"], input:not([type]), input[type="file"] {
+  font: inherit; font-size: 0.92rem; padding: 8px 10px; background: var(--card); color: var(--text);
+  border: 1px solid var(--line); border-radius: 10px; min-width: 0;
+}
+select:focus, input:focus, button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+button { font: inherit; font-size: 0.9rem; padding: 8px 14px; background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; font-weight: 500; }
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:disabled { opacity: 0.5; cursor: default; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+button.link { border: 0; background: none; padding: 0; color: var(--accent); text-decoration: underline; font-weight: 500; }
+
+/* The map page: a stage with cards floating over the map */
+main { display: grid; grid-template-columns: 1fr 340px; min-height: 0; }
+#stage { position: relative; min-height: 0; overflow: hidden; }
+#map {
+  position: absolute; inset: 0;
+  background-color: var(--water);
+  background-image: radial-gradient(var(--dots) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+.float { position: absolute; z-index: 5; left: 16px; top: 16px; bottom: 16px; width: 332px; display: flex; flex-direction: column; gap: 12px; overflow: auto; pointer-events: none; scrollbar-width: none; }
+.float > * { pointer-events: auto; }
+.card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 16px; border: 1px solid var(--line); }
+section { font-size: 0.9rem; }
+#controls.card { display: grid; gap: 10px; }
+#controls .pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+#controls select { width: 100%; }
+.ol-zoom { left: auto !important; right: 12px; top: 12px !important; }
+.ol-attribution { right: 12px; }
+#ask .note { margin-top: 8px; }
+.basemap { filter: grayscale(1) contrast(0.85) brightness(1.08); opacity: 0.6; }
+label.check { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; color: var(--text); font-size: 0.85rem; }
+label.check .note { margin: 0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .basemap { filter: grayscale(1) invert(1) contrast(0.8) brightness(0.7); opacity: 0.5; } }
+#measure { font-weight: 600; }
+aside { overflow: auto; padding: 14px; display: grid; gap: 12px; align-content: start; background: var(--bg); border-left: 1px solid var(--line); }
+#hover { font-size: 0.9rem; }
+#hover strong { font-size: 1rem; }
+#detail h2:first-child { color: var(--text); font-size: 1.05rem; text-transform: none; letter-spacing: 0; }
+details.card > summary { cursor: pointer; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); list-style: none; display: flex; justify-content: space-between; }
+details.card > summary::after { content: "+"; font-size: 1.1rem; line-height: 1; }
+details.card[open] > summary::after { content: "–"; }
+details.card[open] > summary { margin-bottom: 8px; }
+
+/* The request box */
+#ask.card { background: linear-gradient(135deg, var(--ink), #243a5e); color: #fff; border: 0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #ask.card { background: linear-gradient(135deg, #1d2a40, #2a1d2f); } }
+#ask h2 { color: rgba(255, 255, 255, 0.75); }
+#ask .lead { margin: 0 0 10px; font-size: 1.05rem; font-weight: 650; line-height: 1.3; }
+#ask-form { display: flex; gap: 6px; }
+#ask-text { flex: 1; min-width: 0; border: 0; padding: 10px 12px; }
+#ask-form button { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+.chip { font-size: 0.78rem; padding: 4px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.25); color: #fff; }
+.chip:hover { background: rgba(255, 255, 255, 0.28); border-color: #fff !important; }
+#ask .note, #ask button.link { color: rgba(255, 255, 255, 0.8); }
+#ask-card { margin-top: 12px; padding: 12px; border-radius: 10px; background: var(--card); color: var(--text); }
+#ask-card[hidden] { display: none; }
+#ask-card h2 { color: var(--muted); }
+.understood { margin: 0 0 6px; font-weight: 600; }
+.notes { margin: 0 0 8px; padding-left: 18px; color: var(--accent); font-size: 0.85rem; }
+.menus { display: grid; gap: 8px; }
+.menus label { display: grid; grid-template-columns: 56px 1fr; gap: 6px; align-items: center; }
+.buttons { display: flex; gap: 8px; margin-top: 12px; }
+
+/* Legend with counts */
+.legend-title { font-weight: 700; margin-bottom: 8px; line-height: 1.25; }
+.legend-row { display: grid; grid-template-columns: 22px minmax(0, 1fr) 60px 38px; align-items: center; gap: 8px; margin: 3px 0; font-size: 0.85rem; }
+.swatch { width: 22px; height: 14px; border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12); }
+.lbar { height: 8px; border-radius: 4px; background: var(--panel); overflow: hidden; }
+.lbar i { display: block; height: 100%; border-radius: 4px; }
+.lcount { color: var(--muted); font-size: 0.75rem; text-align: right; font-variant-numeric: tabular-nums; }
+.note { color: var(--muted); font-size: 0.8rem; margin-top: 6px; }
+
+table { border-collapse: collapse; width: 100%; }
+td { padding: 5px 0; vertical-align: top; border-bottom: 1px solid var(--line); }
+td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.moe { color: var(--muted); font-size: 0.78rem; display: block; font-weight: 400; }
+.nodata { color: var(--muted); font-style: italic; font-weight: 400; }
+
+/* Footer */
+ul.plain, ol.plain { margin: 0 0 10px; padding-left: 20px; font-size: 0.88rem; display: grid; gap: 4px; }
+#notes label { display: grid; gap: 4px; margin-bottom: 8px; font-size: 0.85rem; }
+#notes input[type="text"] { width: 100%; box-sizing: border-box; }
+#notes-summary { text-transform: none; letter-spacing: 0; font-weight: 500; margin-left: 8px; flex: 1; }
+#tour-card { position: absolute; z-index: 6; right: 16px; bottom: 28px; width: min(340px, calc(100% - 32px)); }
+#tour-card[hidden] { display: none; }
+#tour-card h2 { margin: 4px 0; font-size: 1.05rem; }
+#tour-card p { margin: 6px 0; }
+
+#story { display: none; }
+@media print {
+  body.printing-story > *:not(#story) { display: none !important; }
+  body.printing-story { display: block; height: auto; overflow: visible; background: #fff; color: #000; }
+  body.printing-story #story { display: block; padding: 0; font-family: system-ui, sans-serif; }
+  #story h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  #story .story-meta { color: #555; font-size: 0.8rem; margin: 4px 0; }
+  #story .story-page { break-after: page; }
+  #story .story-page:last-of-type { break-after: auto; }
+  #story h2 { font-size: 1.15rem; margin: 12px 0 4px; }
+  #story img { width: 100%; height: auto; border: 1px solid #bbb; margin: 8px 0; }
+  #story .story-legend { display: grid; gap: 3px; font-size: 0.8rem; }
+  #story .legend-row { display: flex; align-items: center; gap: 8px; }
+  #story .lbar { display: none; }
+}
+
+footer { padding: 8px 20px; background: var(--card); border-top: 1px solid var(--line); color: var(--muted); font-size: 0.78rem; }
+footer p { margin: 3px 0; }
+footer summary { cursor: pointer; font-weight: 600; }
+#notices > summary { margin-top: 2px; }
+
+@media (max-width: 900px) {
+  main { grid-template-columns: 1fr; grid-template-rows: 70vh auto; }
+  .float { width: min(332px, calc(100% - 32px)); bottom: auto; max-height: calc(100% - 32px); }
+  aside { border-left: 0; border-top: 1px solid var(--line); }
+}
+
+/* The tooltip over a point layer's dots. */
+#point-tip { position: fixed; z-index: 20; max-width: 260px; padding: 8px 10px; border-radius: 8px; background: var(--card, #fff); color: var(--ink, #1c2430); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25); font-size: 0.85rem; pointer-events: none; }
+#point-tip[hidden] { display: none; }
+#points-legend .row { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; margin: 2px 0; }
+
+/* The match assistant's recipe log. */
+.recipe { white-space: pre-wrap; font-size: 0.82rem; padding: 8px; border-radius: 8px; background: color-mix(in srgb, var(--text, #15202f) 6%, transparent); }
+#level-guide table { font-size: 0.8rem; }
+
+/* All states draws the states only: the tools that need smaller areas are off. */
+body.all-states #radius, body.all-states #regions { display: none; }
+#detail .us-ref { font-size: 0.82rem; color: var(--muted); font-weight: 400; }
+.us-note { grid-column: 1 / -1; }
+
+/* A list that picks one or many (ctrl-click, shift-click): the map's measure list, the report builder, the data tables */
+.pick-list { max-height: 220px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; padding: 4px; }
+.pick-group { margin: 8px 6px 2px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.pick-list [role="option"] { padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 0.86rem; user-select: none; }
+.pick-list [role="option"]:hover { background: var(--panel); }
+.pick-list [role="option"][aria-selected="true"] { background: var(--accent); color: #fff; }
+.pick-list [role="option"]:focus-visible { outline: 2px solid var(--text); outline-offset: -2px; }
+
+/* The window that asks which file to use from a zip or tar archive (open-file.js). */
+dialog.pick-file { max-width: 32rem; background: var(--panel); color: var(--text); border: 1px solid var(--muted); border-radius: 6px; padding: 1rem 1.25rem; }
+dialog.pick-file ul { list-style: none; padding: 0; margin: 0.5rem 0 1rem; max-height: 50vh; overflow: auto; }
+dialog.pick-file li { margin: 0.25rem 0; }
+dialog.pick-file::backdrop { background: rgb(0 0 0 / 0.3); }

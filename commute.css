@@ -1,0 +1,12 @@
+/* Commuting flows. The shared look is in style.css and compare.css. */
+#flow-map svg { width: 100%; height: auto; display: block; background: var(--panel); border-radius: 12px; }
+#flow-map .county { fill: var(--card); stroke: var(--line); stroke-width: 0.8; }
+#flow-map .home { fill: var(--accent); fill-opacity: 0.18; stroke: var(--accent); stroke-width: 1.6; }
+#flow-map .flow { fill: none; stroke: var(--accent); stroke-opacity: 0.5; stroke-linecap: round; }
+#flow-map .flow.on { stroke-opacity: 0.95; }
+#flow-map circle { fill: var(--accent); }
+#flow-map text { font: 600 13px system-ui, sans-serif; fill: var(--text); paint-order: stroke; stroke: var(--card); stroke-width: 3px; }
+#destinations table { margin-top: 14px; }
+#destinations tbody tr { cursor: default; }
+#destinations tbody tr:hover td { background: var(--panel); }
+#destinations td.num, #destinations th.num { text-align: right; font-variant-numeric: tabular-nums; }

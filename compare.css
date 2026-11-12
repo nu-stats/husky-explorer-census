@@ -1,0 +1,74 @@
+/* Compare and "where people come from" pages; the shared look is in style.css. */
+body.compare { display: block; height: auto; background: var(--bg); }
+body.compare header { position: sticky; top: 0; }
+#page { display: grid; grid-template-columns: 320px 1fr; gap: 20px; padding: 20px; max-width: 1320px; margin: 0 auto; align-items: start; }
+#controls, #report { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; }
+body.compare #controls { display: block; }
+#controls label { display: grid; gap: 4px; margin: 10px 0; }
+#controls input:not([type="checkbox"]) { width: 100%; }
+#controls #measures label { display: flex; align-items: flex-start; gap: 8px; margin: 4px 0; color: var(--text); font-size: 0.88rem; font-weight: 400; }
+#controls #measures input { margin-top: 3px; accent-color: var(--accent); }
+#controls h2:not(:first-child) { margin-top: 18px; }
+#status { color: var(--accent); min-height: 1.4em; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+#report h2 { font-size: 1.2rem; text-transform: none; letter-spacing: -0.01em; color: var(--text); margin: 6px 0 10px; }
+#table table { margin: 8px 0 18px; }
+#table th { text-align: right; padding: 8px 10px; border-bottom: 2px solid var(--line); font-size: 0.82rem; color: var(--muted); }
+#table th:first-child { text-align: left; }
+#table td { padding: 8px 10px; }
+#table td:first-child { text-align: left; font-weight: 500; }
+#table tbody tr:nth-child(even) td { background: var(--panel); }
+.dot { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 50%; }
+.differs { font-size: 0.75rem; color: var(--muted); display: block; }
+#chart svg { width: 100%; height: auto; color: var(--text); }
+#report #notices { color: var(--muted); font-size: 0.78rem; margin-top: 16px; }
+@media (max-width: 900px) { #page { grid-template-columns: 1fr; padding: 12px; } }
+@media print {
+  header, #controls, .actions { display: none; }
+  #page { display: block; padding: 0; }
+  #report { box-shadow: none; border: 0; padding: 0; }
+  :root { --bg: #fff; --card: #fff; --text: #000; --muted: #333; --line: #bbb; --panel: #fff; }
+  body { background: #fff; color: #000; }
+}
+
+/* Where people come from */
+.bar { display: block; height: 10px; background: linear-gradient(90deg, #e8505f, var(--accent)); border-radius: 5px; }
+.barcell { width: 25%; }
+.moe-cell { color: var(--muted); font-size: 0.8rem; }
+#born table, #refugees table { width: 100%; }
+#born td, #refugees td { text-align: right; font-weight: 400; }
+#born td:first-child, #refugees td:first-child { text-align: left; }
+
+/* Place profile */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin: 10px 0 22px; }
+.tile { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--panel); }
+.tile-label { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+.tile-value { font-size: 1.7rem; font-weight: 750; letter-spacing: -0.02em; margin: 2px 0; font-variant-numeric: tabular-nums; }
+.tile-ref { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+h2.section { margin-top: 8px; }
+#report h3 { margin: 14px 0 6px; font-size: 1rem; }
+.tablepick { max-width: 420px; margin-bottom: 10px; }
+table.census th { text-align: right; font-size: 0.78rem; color: var(--muted); padding: 6px 8px; border-bottom: 2px solid var(--line); }
+table.census td { padding: 5px 8px; text-align: right; font-variant-numeric: tabular-nums; font-weight: 400; }
+table.census td.lbl { text-align: left; }
+table.census tr.d0 td.lbl { font-weight: 700; }
+table.census tr.d1 td.lbl { padding-left: 22px; font-weight: 600; }
+table.census tr.d2 td.lbl { padding-left: 40px; }
+table.census tr.d3 td.lbl { padding-left: 58px; }
+table.census tr.d4 td.lbl { padding-left: 76px; }
+table.census td.share { color: var(--muted); }
+table.census .barcell { width: 18%; text-align: left; }
+
+/* Report builder: the measure list picks several at once */
+#controls #measures[role="listbox"] { display: block; max-height: 420px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; padding: 4px; }
+#measures .pick-group { margin: 8px 6px 2px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+#measures [role="option"] { padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 0.88rem; user-select: none; }
+#measures [role="option"]:hover { background: var(--panel); }
+#measures [role="option"][aria-selected="true"] { background: var(--accent); color: #fff; }
+#measures [role="option"]:focus-visible { outline: 2px solid var(--text); outline-offset: -2px; }
+.pick-actions { display: flex; gap: 8px; align-items: center; margin: 6px 0; }
+#pick-count { color: var(--muted); font-size: 0.8rem; }
+#mix p { background: var(--panel); border-left: 3px solid var(--accent); padding: 8px 12px; margin: 6px 0; font-size: 0.85rem; }
+#table .blank { color: var(--muted); font-size: 0.78rem; display: block; }
+#table .src { display: block; color: var(--muted); font-size: 0.75rem; font-weight: 400; }
+#notices p { margin: 6px 0; }

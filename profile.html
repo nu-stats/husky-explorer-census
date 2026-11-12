@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Place profile · Husky Explorer</title>
+<link rel="stylesheet" href="/husky-explorer-census/style.css">
+<link rel="stylesheet" href="/husky-explorer-census/compare.css">
+</head>
+<body class="compare">
+<header>
+  <a class="brand" href="/husky-explorer-census/" aria-label="Husky Explorer home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#c8102e"/><path d="M16 6.5 25.5 12 16 17.5 6.5 12z" fill="#fff"/><path d="m6.5 16.5 9.5 5.5 9.5-5.5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".8"/><path d="m6.5 21 9.5 5.5L25.5 21" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/></svg>
+    <b>Husky <span>Explorer</span></b>
+  </a>
+  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html" aria-current="page">Place profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
+</header>
+<div id="page">
+  <section id="controls">
+    <h2>Find a place</h2>
+    <label>State <select id="state"></select></label>
+    <label>Kind of area
+      <select id="level">
+        <option value="cousub">Towns and townships</option>
+          <option value="zcta">ZIP code areas</option>
+        <option value="place">Cities and places</option>
+        <option value="county">Counties</option>
+        <option value="tract">Census tracts</option>
+      </select>
+    </label>
+    <label>Place <input id="place" list="places" autocomplete="off" placeholder="Start typing a name"></label>
+    <datalist id="places"></datalist>
+    <p class="note">New England towns and the townships of states such as New York, Pennsylvania and Michigan are “towns and townships”; incorporated cities and census-designated places are “cities and places”. A city can be in both lists.</p>
+    <p id="status" role="status"></p>
+  </section>
+  <section id="report">
+    <div id="empty">
+      <h2>Place profile</h2>
+      <p>Choose a state and a kind of area, then type a name. You get the place at a glance and every table the Census Bureau publishes for it that has been fetched here, with margins of error.</p>
+    </div>
+    <div id="profile" hidden>
+      <h2 id="title"></h2>
+      <p class="note" id="sub"></p>
+      <label id="oneyear-box" class="note" hidden><input type="checkbox" id="oneyear"> Use the newest 1-year estimates (2024): for places of 65,000 or more, with wider margins of error</label>
+      <label id="earlier-box" class="note" hidden><input type="checkbox" id="earlier"> Compare with the 2015–2019 estimates (dollar amounts are not adjusted for inflation)</label>
+      <div id="tiles" class="tiles"></div>
+      <p id="reporting-note" class="note" hidden></p>
+      <h2 class="section">Tables</h2>
+      <p class="note">Pick one or many tables. Click picks one; ctrl-click (Cmd-click on a Mac) adds or removes one; shift-click takes everything from the last click. Arrow keys, Space and Ctrl+A work too.</p>
+      <div id="table-list" class="pick-list" aria-label="Tables"></div>
+      <div class="actions"><button id="table-csv" type="button">Download the picked tables (CSV)</button> <button id="table-xlsx" type="button">Download the picked tables (Excel)</button> <a id="compare-link" href="/husky-explorer-census/compare.html">Compare with other places</a></div>
+      <div id="table-view"></div>
+      <div id="notices">
+        <p>This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.</p>
+        <p id="source">Source: U.S. Census Bureau, American Community Survey 5-year 2020–2024 estimates. Margins of error are at the 90 percent confidence level. Estimates for small places can have wide margins; a blank means the Bureau published no estimate.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<script type="module" src="/husky-explorer-census/profile.js"></script>
+</body>
+</html>

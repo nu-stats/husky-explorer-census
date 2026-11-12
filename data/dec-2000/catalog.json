@@ -1,0 +1,1 @@
+{"dataset":"dec-2000","label":"2000 Census, Summary File 1","year":2000,"tables":[{"id":"P1","concept":"TOTAL POPULATION [1]","variables":[{"id":"P001001","table":"P1","concept":"TOTAL POPULATION [1]","label":["Total"],"kind":"count"}]}]}

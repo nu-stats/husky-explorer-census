@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data tables · Husky Explorer</title>
+<link rel="stylesheet" href="/husky-explorer-census/style.css">
+<link rel="stylesheet" href="/husky-explorer-census/compare.css">
+</head>
+<body class="compare">
+<header>
+  <a class="brand" href="/husky-explorer-census/" aria-label="Husky Explorer home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#c8102e"/><path d="M16 6.5 25.5 12 16 17.5 6.5 12z" fill="#fff"/><path d="m6.5 16.5 9.5 5.5 9.5-5.5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".85"/></svg>
+    <b>Husky <span>Explorer</span></b>
+  </a>
+  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html">Place profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html" aria-current="page">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
+</header>
+<div id="page">
+  <section id="controls">
+    <h2>Pick a table</h2>
+    <label>State <select id="state"></select></label>
+    <h3>1. Source</h3>
+    <div id="sources" class="sources"></div>
+    <div id="step2" hidden>
+      <h3>2. Tables (pick one or many)</h3>
+      <label>Search tables <input id="find" type="search" placeholder="income, age, housing…"></label>
+      <p class="note" id="tcount"></p>
+      <p class="note">Click to pick one. Ctrl-click (Cmd-click on a Mac) adds or removes one; Shift-click takes everything from the last click. Arrow keys, Space and Ctrl+A work too.</p>
+      <div id="tables" class="tables pick-list"></div>
+    </div>
+    <div id="step3" hidden>
+      <h3>3. Area</h3>
+      <p class="note" id="chosen"></p>
+      <label>Kind of area <select id="level"></select></label>
+      <label>Only areas named <input id="area" type="search" placeholder="part of a name"></label>
+      <p><button type="button" id="show">Show table</button></p>
+      <p class="note" id="status" role="status" aria-live="polite"></p>
+    </div>
+    <p class="note">Other data, such as health, crime and housing measures, are on the <a href="/husky-explorer-census/sources.html">Data sources</a> page and the map.</p>
+  </section>
+  <section id="report">
+    <h2>Data tables</h2>
+    <p>Choose a source, then a table, then the kind of area, and read the whole table or download it. Margins of error come with every American Community Survey estimate and are never dropped. A blank cell means no data, not zero.</p>
+    <div id="result" hidden>
+      <p class="note" id="rcount"></p>
+      <p><button type="button" id="download">Download CSV</button></p>
+      <div style="overflow:auto;max-height:70vh"><div id="grid"></div></div>
+    </div>
+    <div id="notices"><p>This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.</p></div>
+  </section>
+</div>
+<style>
+.sources{display:flex;flex-wrap:wrap;gap:8px}
+.source,.tbl{text-align:left;border:1px solid #c9ccd1;background:#fff;border-radius:8px;padding:8px 10px;cursor:pointer;font:inherit}
+.source{display:flex;flex-direction:column;gap:2px}
+.source.on,.tbl.on{border-color:#c8102e;box-shadow:0 0 0 1px #c8102e}
+.tables{margin:0;padding:0;max-height:300px;overflow:auto;border:1px solid #c9ccd1;border-radius:8px}
+.tables{display:block}
+.tables [role=option]{padding:5px 8px;border-radius:6px;cursor:pointer;user-select:none;font-size:.88rem}
+.tables [role=option]:hover{background:#f1f2f4}
+.tables [role=option][aria-selected=true]{background:#c8102e;color:#fff}
+.tables [role=option]:focus-visible{outline:2px solid #000;outline-offset:-2px}
+#grid table{margin-bottom:18px}
+#grid caption{text-align:left;font-weight:600;padding:6px 0}
+</style>
+<script type="module" src="/husky-explorer-census/tables.js"></script>
+</body>
+</html>
