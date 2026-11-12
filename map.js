@@ -140,16 +140,21 @@ function ensureLevel(level) {
 }
 
 // Computes each feature's value, then the classes and colors, for one level.
+// A change made while the tables load (another measure, state or number of classes) starts a newer coloring, and an
+// older one that finishes later must not paint over it: each level remembers its latest run and a stale one stops.
 async function colorLevel(l) {
   const features = l.source.getFeatures()
   if (!features.length) return
-  const table = await tableFor(measure, l.level, choice.state)
+  const run = (l.run = (l.run ?? 0) + 1)
+  const m = measure
+  const table = await tableFor(m, l.level, choice.state)
   // Places are named from the Census table, so every measure calls them the same thing.
   // The 2010 places are not the current ones, so they take the names in their own table.
-  const names = vintage === 2024 || measure.upload ? await loadTable('acs5-2024', 'B01003', l.level, choice.state) : table
+  const names = vintage === 2024 || m.upload ? await loadTable('acs5-2024', 'B01003', l.level, choice.state) : table
+  if (run !== l.run || m !== measure) return
   const values = []
   for (const f of features) {
-    const { est, moe } = measureValue(measure, table, f.getId())
+    const { est, moe } = measureValue(m, table, f.getId())
     f.set('est', est, true)
     f.set('moe', moe, true)
     f.set('label', names.name(f.getId()), true)
@@ -164,10 +169,10 @@ async function colorLevel(l) {
     // A few extreme values (a tract that emptied, a new development) would stretch every class,
     // so a measure that asks for it gets its breaks from the middle 96 percent; the extremes
     // still take the end classes and every value stays true on the map.
-    l.clip = measure.clip && values.length > 50 ? clipRange(values) : null
+    l.clip = m.clip && values.length > 50 ? clipRange(values) : null
     const [lo, hi] = l.clip ?? [-Infinity, Infinity]
     l.classes = classify(l.clip ? values.map((v) => Math.min(hi, Math.max(lo, v))) : values, choice.method, choice.count)
-    l.colors = rampColors(measure.ramp, l.classes.breaks.length)
+    l.colors = rampColors(m.ramp, l.classes.breaks.length)
     for (const f of features) {
       const est = f.get('est')
       f.set('color', est === null ? NO_DATA : l.colors[classIndex(est, l.classes.min, l.classes.breaks)], true)
@@ -177,7 +182,9 @@ async function colorLevel(l) {
 }
 
 // After a change of measure or classes: recolor what is loaded, and the visible level.
+let recolorRun = 0
 async function recolor() {
+  const run = ++recolorRun
   measure = findMeasure(choice.measure) ?? MEASURES[0]
   if ((measure.vintage ?? 2024) !== vintage) {
     // A measure on the other boundary set: swap the shapes (showState recolors).
@@ -187,6 +194,8 @@ async function recolor() {
   for (const l of Object.values(levels)) if (l.loaded && l.level !== activeLevel()) await l.loaded.then(() => colorLevel(l))
   await ensureLevel(activeLevel())
   await colorLevel(levels[activeLevel()])
+  // A newer change started while this one waited: it draws the map and the legend.
+  if (run !== recolorRun) return
   showLevels()
   drawLegend()
 }
@@ -331,13 +340,16 @@ async function showState(state) {
   const everyState = state === ALL_STATES
   document.body.classList.toggle('all-states', everyState)
   for (const kind of ['county', 'tract', 'blockgroup', 'place', 'cousub', 'zcta']) {
-    const has = !everyState && (kind === 'county' || kind === 'tract' || kind === 'blockgroup' || builtStates[state]?.levels.includes(kind))
+    // Counties and tracts are built for every state; block groups, towns, places and ZIP areas only where the index says so.
+    const has = !everyState && (kind === 'county' || kind === 'tract' || builtStates[state]?.levels.includes(kind))
     el('level').querySelector(`option[value="${kind}"]`).disabled = !has
     if (!has && choice.level === kind) {
       choice.level = 'auto'
       el('level').value = 'auto'
     }
   }
+  // All states draws the states; say so where the other levels are greyed out.
+  el('level').querySelector('option[value="auto"]').textContent = everyState ? 'States (pick one state for counties, towns, cities, tracts)' : 'Auto (by zoom)'
   el('detail').replaceChildren(...detailPrompt())
   const url = new URL(location.href)
   url.searchParams.set('s', state)
