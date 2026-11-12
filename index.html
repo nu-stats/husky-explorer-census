@@ -45,13 +45,6 @@
       </section>
       <section id="controls" class="card">
         <h2>Map</h2>
-        <label>Showing <select id="measure"></select></label>
-        <details id="multi" open>
-          <summary>Pick several measures for a report</summary>
-          <p class="note">Click shows one on the map. Ctrl-click (Cmd-click on a Mac) adds or removes one; Shift-click takes everything from the last click. Arrow keys, Space and Ctrl+A work too.</p>
-          <div id="measure-list" class="pick-list" aria-label="Measures"></div>
-          <p><span id="map-pick-count" class="note"></span> <a id="map-report" href="/husky-explorer-census/report.html">Build a report from the picked measures</a></p>
-        </details>
         <div class="pair">
           <label>State <select id="state"></select></label>
           <label>Areas
@@ -66,6 +59,13 @@
             </select>
           </label>
         </div>
+        <label>Showing <select id="measure"></select></label>
+        <details id="multi" open>
+          <summary>Pick several measures for a report</summary>
+          <p class="note">Click shows one on the map. Ctrl-click (Cmd-click on a Mac) adds or removes one; Shift-click takes everything from the last click. Arrow keys, Space and Ctrl+A work too.</p>
+          <div id="measure-list" class="pick-list" aria-label="Measures"></div>
+          <p><span id="map-pick-count" class="note"></span> <a id="map-report" href="/husky-explorer-census/report.html">Build a report from the picked measures</a></p>
+        </details>
         <div class="pair">
           <label>Classes
             <select id="method">

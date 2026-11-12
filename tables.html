@@ -20,6 +20,7 @@
   <section id="controls">
     <h2>Pick a table</h2>
     <label>State <select id="state"></select></label>
+    <label>Kind of area <select id="level"></select></label>
     <h3>1. Source</h3>
     <div id="sources" class="sources"></div>
     <div id="step2" hidden>
@@ -30,9 +31,8 @@
       <div id="tables" class="tables pick-list"></div>
     </div>
     <div id="step3" hidden>
-      <h3>3. Area</h3>
+      <h3>3. Show it</h3>
       <p class="note" id="chosen"></p>
-      <label>Kind of area <select id="level"></select></label>
       <label>Only areas named <input id="area" type="search" placeholder="part of a name"></label>
       <p><button type="button" id="show">Show table</button></p>
       <p class="note" id="status" role="status" aria-live="polite"></p>
@@ -41,7 +41,7 @@
   </section>
   <section id="report">
     <h2>Data tables</h2>
-    <p>Choose a source, then a table, then the kind of area, and read the whole table or download it. Margins of error come with every American Community Survey estimate and are never dropped. A blank cell means no data, not zero.</p>
+    <p>Choose a state and the kind of area (state, counties, towns, cities, ZIP code areas or tracts), then a source and a table, and read the whole table or download it. Margins of error come with every American Community Survey estimate and are never dropped. A blank cell means no data, not zero.</p>
     <div id="result" hidden>
       <p class="note" id="rcount"></p>
       <p><button type="button" id="download">Download CSV</button></p>

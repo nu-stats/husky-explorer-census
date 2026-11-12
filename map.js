@@ -11,6 +11,7 @@ import { mapCsv, mapGeoJson, mapGrid, mapNotices, mapTable } from './lib/mapdata
 import { toXlsx } from './lib/xlsx.js'
 import { available, hasVintage, LEVELS, LEVEL_NAMES, loadGeometry, loadIndex, loadTable, loadTableOrEmpty } from './lib/data.js'
 import { ALL_STATES, US, US_NAME, US_NOTICE } from './lib/national.js'
+import { SITE } from './lib/site.js'
 import { decimalsFor, formatMoe, formatValue } from './lib/format.js'
 import { inUnits, scale } from './lib/temperature.js'
 import { indexTable, MEASURES, measureValue } from './lib/measures.js'
@@ -632,7 +633,8 @@ async function start() {
   el('state').add(new Option('All states', ALL_STATES))
   for (const f of fips) el('state').add(new Option(builtStates[f].name, f))
   const wanted = new URLSearchParams(location.search).get('s')
-  const first = wanted && (wanted === ALL_STATES || builtStates[wanted]) ? wanted : builtStates['25'] ? '25' : fips[0]
+  // A hosted site of every state (a site profile, such as the census one) opens on all of them, so no state looks like the only one.
+  const first = wanted && (wanted === ALL_STATES || builtStates[wanted]) ? wanted : SITE && fips.length > 1 ? ALL_STATES : builtStates['25'] ? '25' : fips[0]
   el('state').value = first
   await showState(first)
 }

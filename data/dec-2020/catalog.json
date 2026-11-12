@@ -1,1 +1,0 @@
-{"dataset":"dec-2020","label":"2020 Census, Demographic and Housing Characteristics","year":2020,"tables":[{"id":"P1","concept":"TOTAL POPULATION","variables":[{"id":"P1_001N","table":"P1","concept":"TOTAL POPULATION","label":["Total"],"kind":"count"}]}]}
