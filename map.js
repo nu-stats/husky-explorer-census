@@ -12,7 +12,7 @@ import { mapCsv, mapGeoJson, mapGrid, mapNotices, mapTable } from './lib/mapdata
 import { toXlsx } from './lib/xlsx.js'
 import { available, hasVintage, LEVELS, LEVEL_NAMES, loadGeometry, loadIndex, loadTable, loadTableOrEmpty } from './lib/data.js'
 import { ALL_STATES, US, US_NAME, US_NOTICE } from './lib/national.js'
-import { decimalsFor, formatMoe, formatValue } from './lib/format.js'
+import { decimalsFor, formatMoe, formatValue, SHOW_MOE } from './lib/format.js'
 import { inUnits, scale } from './lib/temperature.js'
 import { indexTable, MEASURES, measureValue } from './lib/measures.js'
 import { rampColors } from './lib/ramps.js'
@@ -30,6 +30,7 @@ const NO_DATA = '#d9d9d9'
 const TRACT_BELOW = 250
 const BLOCKGROUP_BELOW = 60
 
+const DETAIL_PROMPT = SHOW_MOE ? 'Click an area to see every measure for it, with margins of error.' : 'Click an area to see every measure for it.'
 const el = (id) => document.getElementById(id)
 const choice = { state: '', measure: MEASURES[0].id, level: 'auto', method: 'natural-breaks', count: 5 }
 let measure = MEASURES[0]
@@ -362,7 +363,7 @@ function detailPrompt() {
   const h = document.createElement('h2')
   h.textContent = 'Details'
   const p = document.createElement('p')
-  p.textContent = 'Click an area to see every measure for it, with margins of error.'
+  p.textContent = DETAIL_PROMPT
   return [h, p]
 }
 

@@ -3,7 +3,7 @@
 import { esc } from './lib/chart.js'
 import { available, loadGeometry, loadTable } from './lib/data.js'
 import { describeConditions, findAreas, findGrid, OPS } from './lib/findwhere.js'
-import { formatValue } from './lib/format.js'
+import { formatValue, moeText } from './lib/format.js'
 import { levelWord } from './lib/match.js'
 import { mapCsv } from './lib/mapdata.js'
 import { toXlsx } from './lib/xlsx.js'
@@ -158,7 +158,7 @@ export function setupFindWhere({ ol, map, el, measures, level, state, saveRegion
       `<ul class="plain">${words.map((w) => `<li>${esc(w)}</li>`).join('')}</ul>` +
       head +
       table +
-      `<p class="note">${result.noValue ? `${result.noValue} ${esc(levelWord(lv))} had no value for at least one measure and could not be checked. ` : ''}${near ? `${near} meet the cutoffs on the estimate, but the 90 percent margin of error reaches across a cutoff, so they are marked “near a cutoff”. ` : ''}Estimates are survey results with margins of error; modeled and rank measures have none.</p>` +
+      `<p class="note">${result.noValue ? `${result.noValue} ${esc(levelWord(lv))} had no value for at least one measure and could not be checked. ` : ''}${near ? `${near} meet the cutoffs on the estimate, but the 90 percent margin of error reaches across a cutoff, so they are marked “near a cutoff”. ` : ''}${moeText('Estimates are survey results with margins of error; modeled and rank measures have none.')}</p>` +
       (result.matches.length ? '<p><button type="button" id="fw-csv">Download CSV</button> <button type="button" id="fw-xlsx">Download Excel</button></p><p><label>Region name <input id="fw-region-name" type="text" maxlength="80" autocomplete="off" placeholder="High poverty, low income"></label> <button type="button" id="fw-region">Save these areas as a custom region</button></p>' : '')
     el('fw-csv')?.addEventListener('click', () => download('csv'))
     el('fw-xlsx')?.addEventListener('click', () => download('xlsx'))

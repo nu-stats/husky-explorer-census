@@ -3,7 +3,7 @@
 import { esc } from './lib/chart.js'
 import { openText } from './open-file.js'
 import { available, loadGeometry, loadTable } from './lib/data.js'
-import { formatValue } from './lib/format.js'
+import { formatValue, withoutMoe } from './lib/format.js'
 import { levelWord } from './lib/match.js'
 import { idsInside, readRegionsFile, regionsFile, regionSummary } from './lib/regions.js'
 import { toXlsx } from './lib/xlsx.js'
@@ -223,7 +223,7 @@ export function setupRegions({ ol, map, el, measures, areaAt, level, state }) {
   function download(kind) {
     if (!last) return
     const name = `region-${last.region.name.replace(/[^\w-]+/g, '-')}.${kind}`
-    const g = grid()
+    const g = withoutMoe(grid())
     const cell = (x) => (/[",\n]/.test(String(x)) ? `"${String(x).replaceAll('"', '""')}"` : String(x))
     const blob = kind === 'csv' ? new Blob([g.map((r) => r.map(cell).join(',')).join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' }) : new Blob([toXlsx(g, 'Region')], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
     const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: name })

@@ -6,6 +6,7 @@
 <title>Husky Explorer</title>
 <link rel="stylesheet" href="/husky-explorer-census/vendor/ol.css">
 <link rel="stylesheet" href="/husky-explorer-census/style.css">
+<style>.moe-note{display:none}</style>
 </head>
 <body>
 <header>
@@ -82,7 +83,7 @@
   </div>
   <aside>
     <section id="hover" class="card" aria-live="polite">Point at an area to see its value.</section>
-    <section id="detail" class="card"><h2>Details</h2><p>Click an area to see every measure for it, with margins of error.</p></section>
+    <section id="detail" class="card"><h2>Details</h2><p>Click an area to see every measure for it<span class="moe-note">, with margins of error</span>.</p></section>
     <details id="radius" class="card">
       <summary>Around a point</summary>
       <p class="note">Totals for the people within a distance of a point you click, from the smallest areas built for this state.</p>
@@ -197,7 +198,7 @@
     <p>Life expectancy: National Center for Health Statistics, U.S. Small-area Life Expectancy Estimates Project (USALEEP), 2010–2015, on 2010 tract boundaries; tracts redrawn since then have no value.</p>
     <p>Environment: Centers for Disease Control and Prevention, National Environmental Public Health Tracking Network (www.cdc.gov/ephtracking). Air quality is the EPA Downscaler model, a 2022 average; park access is 2020. Interpretations here are not CDC’s.</p>
     <p>Street map: © OpenStreetMap contributors (openstreetmap.org/copyright), shown faded under the data and optional; turning it off stops all requests to OpenStreetMap.</p>
-    <p>Boundaries: U.S. Census Bureau, 2024 cartographic boundary files (1:500,000), and 2010 cartographic boundary files for the 2010 census; water-only tracts are not drawn. Colors from ColorBrewer (Brewer, Harrower and Penn State). Margins of error are at the 90 percent confidence level.</p>
+    <p>Boundaries: U.S. Census Bureau, 2024 cartographic boundary files (1:500,000), and 2010 cartographic boundary files for the 2010 census; water-only tracts are not drawn. Colors from ColorBrewer (Brewer, Harrower and Penn State).<span class="moe-note"> Margins of error are at the 90 percent confidence level.</span></p>
   </details>
 </footer>
 <script src="/husky-explorer-census/vendor/ol.js"></script>

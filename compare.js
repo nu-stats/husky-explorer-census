@@ -8,7 +8,7 @@ import { toSpss } from './lib/spss.js'
 import { toStata } from './lib/stata.js'
 import { toXlsx } from './lib/xlsx.js'
 import { levelOf, loadIndex, loadPlaceNames, loadTable, loadTableOrEmpty, stateOf } from './lib/data.js'
-import { formatMoe, formatValue } from './lib/format.js'
+import { formatMoe, formatValue, SHOW_MOE } from './lib/format.js'
 import { MEASURES } from './lib/measures.js'
 import { tickClick } from './lib/multiselect.js'
 import { ALL_STATES, US, US_NAME, US_NOTICE } from './lib/national.js'
@@ -124,7 +124,8 @@ function drawTable(places, rows) {
   const head = places
     .map((p, i) => `<th scope="col"><span class="dot" style="background:${PLACE_COLORS[i]}"></span>${esc(shortName(p.name))}</th>`)
     .join('')
-  const showDiff = places.length > 1
+  // The test for a difference rests on the margins of error, so a site without them leaves the column out.
+  const showDiff = places.length > 1 && SHOW_MOE
   const body = rows
     .map((r) => {
       const cells = r.values

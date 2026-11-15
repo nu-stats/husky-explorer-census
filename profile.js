@@ -2,7 +2,7 @@
 // (?g=GEOID&t=TABLE) so a profile can be shared.
 import { esc } from './lib/chart.js'
 import { LEVEL_NAMES, levelOf, loadCatalog, loadIndex, loadTable, loadTableOrEmpty, stateOf } from './lib/data.js'
-import { formatMoe, formatValue } from './lib/format.js'
+import { formatMoe, formatValue, moeText, SHOW_MOE } from './lib/format.js'
 import { CRIME_WARNING_SHORT } from './lib/crime-notice.js'
 import { indexTable, MEASURES, measureValue } from './lib/measures.js'
 import { reportingScreen, reportingSentence } from './lib/quality.js'
@@ -20,7 +20,7 @@ const SOURCES = {
   'acs1-2024': 'American Community Survey 1-year 2024 (places of 65,000 or more)',
 }
 const notices = () => [
-  `Source: U.S. Census Bureau, ${SOURCES[dataset]}. Margins of error at the 90 percent confidence level.`,
+  moeText(`Source: U.S. Census Bureau, ${SOURCES[dataset]}. Margins of error at the 90 percent confidence level.`),
   'This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.',
   ...(current?.rows?.some((r) => r.usShare !== undefined) ? [US_NOTICE] : []),
 ]
@@ -122,7 +122,9 @@ async function show(geoid) {
   }
   el('oneyear-box').hidden = !one
   dataset = one && el('oneyear').checked ? 'acs1-2024' : 'acs5-2024'
-  el('source').textContent = `Source: U.S. Census Bureau, ${SOURCES[dataset]}. Margins of error are at the 90 percent confidence level. Estimates for small places can have wide margins; a blank means the Bureau published no estimate.`
+  el('source').textContent = SHOW_MOE
+    ? `Source: U.S. Census Bureau, ${SOURCES[dataset]}. Margins of error are at the 90 percent confidence level. Estimates for small places can have wide margins; a blank means the Bureau published no estimate.`
+    : `Source: U.S. Census Bureau, ${SOURCES[dataset]}. A blank means the Bureau published no estimate.`
   // A town, tract or block group sits inside one county, which gives the numbers a yardstick.
   const county = level === 'place' || level === 'county' || level === 'zcta' ? null : geoid.slice(0, 5)
   const countyName = county ? (await loadTable('acs5-2024', 'B01003', 'county', state)).name(county) : null
@@ -227,7 +229,7 @@ async function oneTable(table, geoid, name, level, state) {
       const bar = r.share === null ? '' : `<span class="bar" style="width:${Math.min(100, r.share).toFixed(1)}%"></span>`
       return (
         `<tr class="d${Math.min(r.depth, 4)}"><td class="lbl">${esc(r.label)}</td>` +
-        `<td>${esc(formatValue(r.est, r.unit))}</td><td class="moe-cell">${esc(moe)}</td>` +
+        `<td>${esc(formatValue(r.est, r.unit))}</td>${SHOW_MOE ? `<td class="moe-cell">${esc(moe)}</td>` : ''}` +
         (earlier ? `<td class="before">${r.before == null ? '' : esc(formatValue(r.before, r.unit))}</td>` : '') +
         `<td class="share">${r.share === null ? '' : r.share.toFixed(1) + '%'}</td>${stateShares ? `<td class="share">${r.stateShare == null ? '' : r.stateShare.toFixed(1) + '%'}</td>` : ''}<td class="barcell">${bar}</td></tr>`
       )
@@ -236,7 +238,7 @@ async function oneTable(table, geoid, name, level, state) {
   const html =
     `<h3>${esc(table.concept)} <span class="note">(${esc(table.id)})</span></h3>` +
     (hasData ? '' : '<p class="note">The Bureau published no estimates in this table for this place.</p>') +
-    `<table class="census"><thead><tr><th scope="col"></th><th scope="col">Estimate</th><th scope="col">Margin of error</th>${earlier ? '<th scope="col">2015–2019</th>' : ''}<th scope="col">Percent of total</th>${stateShares ? `<th scope="col">${esc(built[state].name)}</th>` : ''}<th></th></tr></thead><tbody>${body}</tbody></table>`
+    `<table class="census"><thead><tr><th scope="col"></th><th scope="col">Estimate</th>${SHOW_MOE ? '<th scope="col">Margin of error</th>' : ''}${earlier ? '<th scope="col">2015–2019</th>' : ''}<th scope="col">Percent of total</th>${stateShares ? `<th scope="col">${esc(built[state].name)}</th>` : ''}<th></th></tr></thead><tbody>${body}</tbody></table>`
   return { table, html, rows: hasData ? rows : null, title: `${table.id} ${table.concept}` }
 }
 

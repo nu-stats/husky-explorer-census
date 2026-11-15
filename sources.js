@@ -6,13 +6,14 @@ import { clearedNationalFiles, HELD_BACK, HELD_BACK_NATIONAL, isCleared } from '
 import { MEASURES } from './lib/measures.js'
 import { POINT_LAYERS } from './lib/about.js'
 import { catalogCsv, catalogRows, nationalRows, RELATED, RULES } from './lib/sources.js'
+import { moeText, SHOW_MOE } from './lib/format.js'
 import { SITE } from './lib/site.js'
 
 const el = (id) => document.getElementById(id)
 const NATIONAL_FILES = clearedNationalFiles(['ncvs-2024.json', 'yrbs-2025.json', 'brfss-2025.json', 'nsduh-2024.json', 'atus-2025.json'])
 // Heat measures of a source this copy does not hold are left out (a site profile may keep wet-bulb and not ERA5-Land).
 const heat = HEAT_MEASURES.filter((m) => isCleared(m.source === 'prism' ? 'wetbulb-prism' : 'heat-2000-2020'))
-const rows = catalogRows(MEASURES, heat, { ...LEVEL_NAMES, state: 'state' })
+const rows = catalogRows(MEASURES, heat, { ...LEVEL_NAMES, state: 'state' }).map((r) => (SHOW_MOE ? r : { ...r, kind: r.kind.replace(/ with (wider )?margins of error( (90 percent))?/i, '') }))
 
 const held = document.createElement('section')
 if (SITE) held.innerHTML = `<h3>What this site holds</h3><p class="note">${esc(SITE.title)}. It holds U.S. Census Bureau data for every county, town, tract, block group and ZIP code area it was built for, and for the cities of the assignment (cities and places are limited to that list). It also holds crime data: the FBI’s public files (reported crime, police employees, incident-based reporting) and campus crime. Nothing else is on this site: no other federal sources, no national surveys, and no restricted data.</p>`
@@ -73,7 +74,7 @@ Promise.all(NATIONAL_FILES.map((name) => fetch(`/husky-explorer-census/data/nati
 ;(SITE && !SITE.datasets.includes('campus') ? Promise.resolve(null) : fetch('/husky-explorer-census/data/campus/index.json'))
   .then((res) => (res?.ok ? res.json() : null))
   .then((file) => {
-    const list = nationalRows(file ? { ...file, tables: file.categories.map((c) => ({ title: `${c.group}: ${c.label}` })) } : null)
+    const list = nationalRows(file ? { ...file, tables: file.categories.map((c) => ({ title: `${c.group}: ${c.label}` })) } : null).map((r) => (SHOW_MOE ? r : { ...r, limits: r.limits.map((l) => moeText(l)).filter(Boolean), geography: moeText(r.geography), terms: moeText(r.terms) }))
     if (!list.length) return
     el('campus').innerHTML = list
       .map(

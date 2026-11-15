@@ -1,7 +1,7 @@
 // Where people come from: countries of birth for a county or state, and the
 // national refugee table. Everything is read from the files the build wrote.
 import { loadIndex, loadTable } from './lib/data.js'
-import { formatMoe, formatValue } from './lib/format.js'
+import { formatMoe, formatValue, SHOW_MOE } from './lib/format.js'
 import { countryColumns, topOrigins } from './lib/origins.js'
 
 const el = (id) => document.getElementById(id)
@@ -50,12 +50,12 @@ async function showBorn() {
       {},
       make('td', {}, r.name, make('span', { className: 'moe', textContent: r.region })),
       cell(count(r.est), ''),
-      cell(r.moe === null ? '' : formatMoe(r.moe, 'count'), 'moe-cell'),
+      ...(SHOW_MOE ? [cell(r.moe === null ? '' : formatMoe(r.moe, 'count'), 'moe-cell')] : []),
       cell(r.share === null ? '' : r.share.toFixed(1) + '%'),
       make('td', { className: 'barcell' }, bar),
     )
   })
-  const head = table(['Country of birth', 'People', 'Margin', 'Share of foreign-born', ''], body)
+  const head = table(['Country of birth', 'People', ...(SHOW_MOE ? ['Margin'] : []), 'Share of foreign-born', ''], body)
   const summary = make('p', { textContent: `Foreign-born residents: ${count(total.est)}${total.moe === null ? '' : ' ' + formatMoe(total.moe, 'count')}. The 15 largest countries of birth are shown.` })
   el('born').replaceChildren(summary, head)
 }

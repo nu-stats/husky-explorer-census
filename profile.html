@@ -6,6 +6,7 @@
 <title>Place profile · Husky Explorer</title>
 <link rel="stylesheet" href="/husky-explorer-census/style.css">
 <link rel="stylesheet" href="/husky-explorer-census/compare.css">
+<style>.moe-note{display:none}</style>
 </head>
 <body class="compare">
 <header>
@@ -36,12 +37,12 @@
   <section id="report">
     <div id="empty">
       <h2>Place profile</h2>
-      <p>Choose a state and a kind of area, then type a name. You get the place at a glance and every table the Census Bureau publishes for it that has been fetched here, with margins of error.</p>
+      <p>Choose a state and a kind of area, then type a name. You get the place at a glance and every table the Census Bureau publishes for it that has been fetched here<span class="moe-note">, with margins of error</span>.</p>
     </div>
     <div id="profile" hidden>
       <h2 id="title"></h2>
       <p class="note" id="sub"></p>
-      <label id="oneyear-box" class="note" hidden><input type="checkbox" id="oneyear"> Use the newest 1-year estimates (2024): for places of 65,000 or more, with wider margins of error</label>
+      <label id="oneyear-box" class="note" hidden><input type="checkbox" id="oneyear"> Use the newest 1-year estimates (2024): for places of 65,000 or more<span class="moe-note">, with wider margins of error</span></label>
       <label id="earlier-box" class="note" hidden><input type="checkbox" id="earlier"> Compare with the 2015–2019 estimates (dollar amounts are not adjusted for inflation)</label>
       <div id="tiles" class="tiles"></div>
       <p id="reporting-note" class="note" hidden></p>
@@ -52,7 +53,7 @@
       <div id="table-view"></div>
       <div id="notices">
         <p>This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.</p>
-        <p id="source">Source: U.S. Census Bureau, American Community Survey 5-year 2020–2024 estimates. Margins of error are at the 90 percent confidence level. Estimates for small places can have wide margins; a blank means the Bureau published no estimate.</p>
+        <p id="source">Source: U.S. Census Bureau, American Community Survey 5-year 2020–2024 estimates.<span class="moe-note"> Margins of error are at the 90 percent confidence level. Estimates for small places can have wide margins;</span> a blank means the Bureau published no estimate.</p>
       </div>
     </div>
   </section>
