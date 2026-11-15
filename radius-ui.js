@@ -1,7 +1,7 @@
 // "Around a point": pick a point on the map and a distance, and get totals for the people inside the
 // circle, from the block groups (or tracts) that overlap it, each weighted by the share of its area inside.
 import { available, loadGeometry, loadTable } from './lib/data.js'
-import { formatValue } from './lib/format.js'
+import { formatValue, SHOW_MOE } from './lib/format.js'
 import { circleRing, shareInside, summarize } from './lib/radius.js'
 
 /**
@@ -89,7 +89,7 @@ export function setupRadius({ ol, map, el, measures, state, built }) {
     }
     const note = Object.assign(document.createElement('p'), {
       className: 'note',
-      textContent: `Each ${plural.slice(0, -1)} counts in proportion to the share of its land inside the circle, which assumes people are spread evenly within it. Counts are rounded estimates; percents are shared numerator over shared denominator. Medians and modeled health measures cannot be added up, so they are left out. Margins of error are not carried through.`,
+      textContent: `Each ${plural.slice(0, -1)} counts in proportion to the share of its land inside the circle, which assumes people are spread evenly within it. Counts are rounded estimates; percents are shared numerator over shared denominator. Medians and modeled health measures cannot be added up, so they are left out.${SHOW_MOE ? ' Margins of error are not carried through.' : ''}`,
     })
     const csv = document.createElement('button')
     csv.type = 'button'

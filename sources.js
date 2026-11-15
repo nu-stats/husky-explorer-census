@@ -5,7 +5,7 @@ import { HEAT_MEASURES } from './lib/heat.js'
 import { clearedNationalFiles, HELD_BACK, HELD_BACK_NATIONAL, isCleared } from './lib/clearance.js'
 import { MEASURES } from './lib/measures.js'
 import { POINT_LAYERS } from './lib/about.js'
-import { catalogCsv, catalogRows, nationalRows, RELATED, RULES } from './lib/sources.js'
+import { catalogCsv, catalogRows, kindWithoutMoe, nationalRows, RELATED, RULES } from './lib/sources.js'
 import { moeText, SHOW_MOE } from './lib/format.js'
 import { SITE } from './lib/site.js'
 
@@ -13,10 +13,10 @@ const el = (id) => document.getElementById(id)
 const NATIONAL_FILES = clearedNationalFiles(['ncvs-2024.json', 'yrbs-2025.json', 'brfss-2025.json', 'nsduh-2024.json', 'atus-2025.json'])
 // Heat measures of a source this copy does not hold are left out (a site profile may keep wet-bulb and not ERA5-Land).
 const heat = HEAT_MEASURES.filter((m) => isCleared(m.source === 'prism' ? 'wetbulb-prism' : 'heat-2000-2020'))
-const rows = catalogRows(MEASURES, heat, { ...LEVEL_NAMES, state: 'state' }).map((r) => (SHOW_MOE ? r : { ...r, kind: r.kind.replace(/ with (wider )?margins of error( (90 percent))?/i, '') }))
+const rows = catalogRows(MEASURES, heat, { ...LEVEL_NAMES, state: 'state' }).map((r) => (SHOW_MOE ? r : { ...r, kind: kindWithoutMoe(r.kind) }))
 
 const held = document.createElement('section')
-if (SITE) held.innerHTML = `<h3>What this site holds</h3><p class="note">${esc(SITE.title)}. It holds U.S. Census Bureau data for every county, town, tract, block group and ZIP code area it was built for, and for the cities of the assignment (cities and places are limited to that list). It also holds crime data: the FBI’s public files (reported crime, police employees, incident-based reporting) and campus crime. Nothing else is on this site: no other federal sources, no national surveys, and no restricted data.</p>`
+if (SITE) held.innerHTML = `<h3>What this site holds</h3><p class="note">${esc(SITE.title)}. It holds U.S. Census Bureau data for every ${SITE.dropLevels.includes('blockgroup') ? 'county, town, tract' : 'county, town, tract, block group'} and ZIP code area it was built for, and for the cities of the assignment (cities and places are limited to that list). It also holds crime data: the FBI’s public files (reported crime, police employees, incident-based reporting) and campus crime. Nothing else is on this site: no other federal sources, no national surveys, and no restricted data.</p>`
 else held.innerHTML = `<h3>Held back until the terms are confirmed</h3><p class="note">These sources are not on the hosted site. The American Time Use Survey shows on the Survey data page on your own computer only, as a preview for checking.</p><ul class="note" style="color:#888">${[...HELD_BACK, ...HELD_BACK_NATIONAL].map((d) => `<li>${esc(d.name)}: ${esc(d.why)}</li>`).join('')}</ul>`
 el('catalog').after(held)
 
@@ -47,14 +47,15 @@ function draw() {
     .join('')
 }
 
-el('points').innerHTML = POINT_LAYERS.map((p) => `<h3>${esc(p.name)}</h3><p class="note">${esc(p.publisher)}. Read about it elsewhere: ${p.about.map(([label, url]) => `<a href="${esc(url)}" rel="noopener noreferrer">${esc(label)}</a>`).join(' · ')}</p>`).join('')
+// (A site that holds no dot layers or surveys has no such sections: the build takes them out of the page.)
+if (el('points')) el('points').innerHTML = POINT_LAYERS.map((p) => `<h3>${esc(p.name)}</h3><p class="note">${esc(p.publisher)}. Read about it elsewhere: ${p.about.map(([label, url]) => `<a href="${esc(url)}" rel="noopener noreferrer">${esc(label)}</a>`).join(' · ')}</p>`).join('')
 
 el('related').innerHTML = RELATED.map((r) => `<h3>${esc(r.name)}</h3><p>${esc(r.what)}</p><ul>${r.links.map(([label, url]) => `<li><a href="${esc(url)}" rel="noopener noreferrer">${esc(label)}</a></li>`).join('')}</ul><p class="note"><strong>Terms:</strong> ${esc(r.terms)}</p>`).join('')
 
 Promise.all(NATIONAL_FILES.map((name) => fetch(`/husky-explorer-census/data/national/${name}`).then((res) => (res.ok ? res.json() : null)).catch(() => null)))
   .then((files) => {
     const list = files.flatMap((f) => nationalRows(f))
-    if (!list.length) return
+    if (!list.length || !el('national')) return
     el('national').innerHTML = list
       .map(
         (r) =>

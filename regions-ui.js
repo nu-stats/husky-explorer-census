@@ -3,7 +3,7 @@
 import { esc } from './lib/chart.js'
 import { openText } from './open-file.js'
 import { available, loadGeometry, loadTable } from './lib/data.js'
-import { formatValue, withoutMoe } from './lib/format.js'
+import { formatValue, SHOW_MOE, withoutMoe } from './lib/format.js'
 import { levelWord } from './lib/match.js'
 import { idsInside, readRegionsFile, regionsFile, regionSummary } from './lib/regions.js'
 import { toXlsx } from './lib/xlsx.js'
@@ -203,7 +203,7 @@ export function setupRegions({ ol, map, el, measures, areaAt, level, state }) {
     last = { region: r, rows }
     const table = `<table class="census"><tbody>${rows.map((x) => `<tr><th scope="row" class="lbl">${esc(x.label)}</th><td>${esc(x.text)}${x.missing ? ` <span class="note">(${x.missing} areas had no value)</span>` : ''}</td></tr>`).join('')}</tbody></table>`
     box.innerHTML =
-      `<h3>${esc(r.name)}</h3><p class="note">${r.ids.length} ${esc(levelWord(r.level))}, added up whole. Counts add; a percent is the summed numerator over the summed denominator. Medians, rates, indexes and modeled health measures cannot be added across areas, so they are left out. Margins of error are not carried through.</p>` +
+      `<h3>${esc(r.name)}</h3><p class="note">${r.ids.length} ${esc(levelWord(r.level))}, added up whole. Counts add; a percent is the summed numerator over the summed denominator. Medians, rates, indexes and modeled health measures cannot be added across areas, so they are left out.${SHOW_MOE ? ' Margins of error are not carried through.' : ''}</p>` +
       table +
       '<p><button type="button" id="region-csv">Download CSV</button> <button type="button" id="region-xlsx">Download Excel</button></p>'
     el('region-csv').addEventListener('click', () => download('csv'))
@@ -216,7 +216,7 @@ export function setupRegions({ ol, map, el, measures, areaAt, level, state }) {
       [`${region.name}: ${region.ids.length} ${levelWord(region.level)}, state ${region.state}`],
       ['Measure', 'Value'],
       ...rows.map((x) => [x.label, x.value]),
-      ['Whole areas added up; margins of error are not carried through. Source: see the Data sources page. This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.'],
+      [`Whole areas added up;${SHOW_MOE ? ' margins of error are not carried through.' : ''} Source: see the Data sources page. This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.`],
     ]
   }
 

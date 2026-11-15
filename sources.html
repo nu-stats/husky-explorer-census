@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/husky-explorer-census/icon.svg" type="image/svg+xml">
 <title>Data sources · Husky Explorer</title>
 <link rel="stylesheet" href="/husky-explorer-census/style.css">
 <link rel="stylesheet" href="/husky-explorer-census/compare.css">
-<style>.moe-note{display:none}</style>
 </head>
 <body class="compare">
 <header>
@@ -14,7 +14,7 @@
     <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#c8102e"/><path d="M16 6.5 25.5 12 16 17.5 6.5 12z" fill="#fff"/><path d="m6.5 16.5 9.5 5.5 9.5-5.5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".8"/><path d="m6.5 21 9.5 5.5L25.5 21" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/></svg>
     <b>Husky <span>Explorer</span></b><small class="tagline">An open alternative to Social Explorer</small>
   </a>
-  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html">Place profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/crime-data.html">Using crime data</a><a href="/husky-explorer-census/campus.html">Campus crime</a><a href="/husky-explorer-census/agency-report.html">Agency report card</a><a href="/husky-explorer-census/sources.html" aria-current="page">Data sources</a></nav>
+  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html">Location profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare locations</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/crime-data.html">Using crime data</a><a href="/husky-explorer-census/campus.html">Campus crime</a><a href="/husky-explorer-census/agency-report.html">Agency report card</a><a href="/husky-explorer-census/sources.html" aria-current="page">Data sources</a></nav>
 </header>
 <div id="page">
   <section id="controls">
@@ -28,16 +28,12 @@
   </section>
   <section id="report">
     <h2>Where every number comes from</h2>
-    <p class="note">Generated from the list of measures the app can show, so it matches what you see. “Where it exists” is the kinds of area the measure is built for; “boundaries” says whose map the numbers sit on, because tracts and block groups were redrawn in 2020. A value marked ≈ is estimated here and is not a published figure.</p>
+    <p class="note">Generated from the list of measures the app can show, so it matches what you see. “Where it exists” is the kinds of area the measure is built for; “boundaries” says whose map the numbers sit on, because tracts were redrawn in 2020. A value marked ≈ is estimated here and is not a published figure.</p>
     <div id="catalog"></div>
-    <h2>Dot layers</h2>
-    <p class="note">Places on the map that are not census areas (the *Places on the map* panel on the map page).</p>
-    <div id="points"></div>
-    <h2>Surveys (victimization, self-report, health and time use)</h2>
-    <p class="note">Surveys of people, not records of crimes known to police. The victimization survey counts crimes whether or not they were reported; the youth survey counts what high school students say they did or experienced. They measure different things from each other and from police data, so do not compare their numbers. Most are national: the figures describe the whole country and some groups, never a city, county or tract. The adult health survey (BRFSS) has results by state, for the states that asked. The time-use survey (ATUS) is hours per day on a diary day, and does not measure total time online. This app does not make local estimates from any of them. Fetch them with “Fetch data”.</p>
-    <div id="national"><p class="note">No national survey file yet.</p></div>
+    
+    
     <h2>Campus crime reports (administrative records)</h2>
-    <p class="note">Counts of crimes reported to campus officials and police under the Clery Act, by school, kind of crime and place on campus. They are records that schools submit, not a sample and not a survey of people, <span class="moe-note">so there are no weights or margins of error, </span>and they are not comparable with the victimization surveys above or with police data. These files are not fetched with the rest: run <code>npm run build:clery</code> in <code>app</code> (about 600 MB, several minutes) once the library has confirmed the terms.</p>
+    <p class="note">Counts of crimes reported to campus officials and police under the Clery Act, by school, kind of crime and place on campus. They are records that schools submit, not a sample and not a survey of people, and they are not comparable with police data.</p>
     <div id="campus"><p class="note">No campus crime file yet.</p></div>
     <h2>Related data held elsewhere</h2>
     <p class="note">These datasets are linked, not copied: their terms forbid redistribution or say nothing. Each is described as its publisher describes it. They define things differently (what counts as a mass shooting, for one), so none is presented as the same measure as another.</p>

@@ -158,7 +158,7 @@ export function setupFindWhere({ ol, map, el, measures, level, state, saveRegion
       `<ul class="plain">${words.map((w) => `<li>${esc(w)}</li>`).join('')}</ul>` +
       head +
       table +
-      `<p class="note">${result.noValue ? `${result.noValue} ${esc(levelWord(lv))} had no value for at least one measure and could not be checked. ` : ''}${near ? `${near} meet the cutoffs on the estimate, but the 90 percent margin of error reaches across a cutoff, so they are marked “near a cutoff”. ` : ''}${moeText('Estimates are survey results with margins of error; modeled and rank measures have none.')}</p>` +
+      `<p class="note">${result.noValue ? `${result.noValue} ${esc(levelWord(lv))} had no value for at least one measure and could not be checked. ` : ''}${near ? moeText(`${near} meet the cutoffs on the estimate, but the 90 percent margin of error reaches across a cutoff, so they are marked “near a cutoff”. `) : ''}${moeText('Estimates are survey results with margins of error; modeled and rank measures have none.')}</p>` +
       (result.matches.length ? '<p><button type="button" id="fw-csv">Download CSV</button> <button type="button" id="fw-xlsx">Download Excel</button></p><p><label>Region name <input id="fw-region-name" type="text" maxlength="80" autocomplete="off" placeholder="High poverty, low income"></label> <button type="button" id="fw-region">Save these areas as a custom region</button></p>' : '')
     el('fw-csv')?.addEventListener('click', () => download('csv'))
     el('fw-xlsx')?.addEventListener('click', () => download('xlsx'))
@@ -172,7 +172,7 @@ export function setupFindWhere({ ol, map, el, measures, level, state, saveRegion
     if (!last) return
     const { conditions, result, level: lv, state: st } = last
     const notices = [
-      `Areas meeting: ${describeConditions(conditions, formatValue).join('; ')}. ${lv}, state ${st}. Margins of error are at the 90 percent confidence level.`,
+      moeText(`Areas meeting: ${describeConditions(conditions, formatValue).join('; ')}. ${lv}, state ${st}. Margins of error are at the 90 percent confidence level.`),
       ...new Set(conditions.map((c) => c.measure.credit).filter(Boolean)),
       API_NOTICE,
       'Boundaries: U.S. Census Bureau cartographic boundary files (1:500,000).',

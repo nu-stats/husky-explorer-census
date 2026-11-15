@@ -1,4 +1,4 @@
-// "Places on the map": dot layers that are not census areas (public housing developments, trauma centers).
+// "Points on the map": dot layers that are not census areas (public housing developments, trauma centers).
 // Each is one small file under /data/points/, listed in its index.json; the layer loads when its box is ticked.
 import { esc } from './lib/chart.js'
 

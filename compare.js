@@ -8,14 +8,14 @@ import { toSpss } from './lib/spss.js'
 import { toStata } from './lib/stata.js'
 import { toXlsx } from './lib/xlsx.js'
 import { levelOf, loadIndex, loadPlaceNames, loadTable, loadTableOrEmpty, stateOf } from './lib/data.js'
-import { formatMoe, formatValue, SHOW_MOE } from './lib/format.js'
+import { formatMoe, formatValue, moeText, SHOW_MOE } from './lib/format.js'
 import { MEASURES } from './lib/measures.js'
 import { tickClick } from './lib/multiselect.js'
 import { ALL_STATES, US, US_NAME, US_NOTICE } from './lib/national.js'
 
 const el = (id) => document.getElementById(id)
 const NOTICES = [
-  'Source: U.S. Census Bureau, American Community Survey 5-year 2020-2024 and 2020 Census. Margins of error at the 90 percent confidence level.',
+  moeText('Source: U.S. Census Bureau, American Community Survey 5-year 2020-2024 and 2020 Census. Margins of error at the 90 percent confidence level.'),
   'This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.',
 ]
 
@@ -87,7 +87,7 @@ function chosenPlaces() {
       if (!ids.includes(geoid)) ids.push(geoid)
     } else unknown = text
   }
-  el('status').textContent = unknown ? `“${unknown}” is not a place in the list. Pick one from the suggestions.` : ''
+  el('status').textContent = unknown ? `“${unknown}” is not in the list. Pick one from the suggestions.` : ''
   return ids
 }
 

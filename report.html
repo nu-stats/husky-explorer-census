@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/husky-explorer-census/icon.svg" type="image/svg+xml">
 <title>Report builder · Husky Explorer</title>
 <link rel="stylesheet" href="/husky-explorer-census/style.css">
 <link rel="stylesheet" href="/husky-explorer-census/compare.css">
-<style>.moe-note{display:none}</style>
 </head>
 <body class="compare">
 <header>
@@ -14,16 +14,16 @@
     <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#c8102e"/><path d="M16 6.5 25.5 12 16 17.5 6.5 12z" fill="#fff"/><path d="m6.5 16.5 9.5 5.5 9.5-5.5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".8"/><path d="m6.5 21 9.5 5.5L25.5 21" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/></svg>
     <b>Husky <span>Explorer</span></b><small class="tagline">An open alternative to Social Explorer</small>
   </a>
-  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html">Place profile</a><a href="/husky-explorer-census/report.html" aria-current="page">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/crime-data.html">Using crime data</a><a href="/husky-explorer-census/campus.html">Campus crime</a><a href="/husky-explorer-census/agency-report.html">Agency report card</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
+  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html">Location profile</a><a href="/husky-explorer-census/report.html" aria-current="page">Report builder</a><a href="/husky-explorer-census/compare.html">Compare locations</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/crime-data.html">Using crime data</a><a href="/husky-explorer-census/campus.html">Campus crime</a><a href="/husky-explorer-census/agency-report.html">Agency report card</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
 </header>
 <div id="page">
   <section id="controls">
-    <h2>Places</h2>
+    <h2>Locations</h2>
     <label>State <select id="state"></select></label>
-    <p class="note">Type a name and pick from the list; up to three places.</p>
-    <label>Place 1 <input id="p0" list="places" autocomplete="off"></label>
-    <label>Place 2 <input id="p1" list="places" autocomplete="off"></label>
-    <label>Place 3 <input id="p2" list="places" autocomplete="off"></label>
+    <p class="note">Type a name and pick from the list; up to three locations.</p>
+    <label>Location 1 <input id="p0" list="places" autocomplete="off"></label>
+    <label>Location 2 <input id="p1" list="places" autocomplete="off"></label>
+    <label>Location 3 <input id="p2" list="places" autocomplete="off"></label>
     <datalist id="places"></datalist>
     <h2>Measures</h2>
     <p class="note" id="pick-help">Click to pick one. Ctrl-click (Cmd-click on a Mac) adds or removes one; Shift-click takes everything from the last click. From the keyboard: arrow keys move, Space toggles, Shift+arrows extend, Ctrl+A picks all.</p>

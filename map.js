@@ -3,9 +3,7 @@
 // are computed here, in the browser, by joining the two on GEOID. A level's
 // boundaries are loaded the first time the map needs them.
 import { breakLabels, classIndex, classify, clipRange } from './lib/classify.js'
-import { setupAsk } from './ask-ui.js'
 import { SITE } from './lib/site.js'
-import { isLoopbackAddress, layerMessage, RECEIVERS, sendToCraft, tableMessage } from './lib/handoff.js'
 import { toDta } from './lib/dta.js'
 import { toRScript } from './lib/rscript.js'
 import { mapCsv, mapGeoJson, mapGrid, mapNotices, mapTable } from './lib/mapdata.js'
@@ -336,7 +334,9 @@ async function showState(state) {
   document.body.classList.toggle('all-states', everyState)
   for (const kind of ['county', 'tract', 'blockgroup', 'place', 'cousub', 'zcta']) {
     const has = !everyState && (kind === 'county' || kind === 'tract' || builtStates[state]?.levels.includes(kind))
-    el('level').querySelector(`option[value="${kind}"]`).disabled = !has
+    // A level the site left out (dropLevels) has no option at all.
+    const option = el('level').querySelector(`option[value="${kind}"]`)
+    if (option) option.disabled = !has
     if (!has && choice.level === kind) {
       choice.level = 'auto'
       el('level').value = 'auto'
@@ -586,7 +586,8 @@ async function start() {
   builtStates = await loadIndex()
   // A site profile (a hosted copy with only some of the data) has no Explore box: its examples name measures the copy may not hold.
   if (SITE) el('ask').remove()
-  else setupAsk({ measures: MEASURES, built: builtStates, loadCounties: countiesOf, apply: applyRequest })
+  // (A hosted copy never loads the Explore box or its code.)
+  else (await import('./ask-ui.js')).setupAsk({ measures: MEASURES, built: builtStates, loadCounties: countiesOf, apply: applyRequest })
   // The example buttons put their words in the box and ask; the person still confirms before anything is drawn.
   for (const chip of document.querySelectorAll('.chip')) {
     chip.addEventListener('click', () => {
@@ -597,7 +598,8 @@ async function start() {
   regionsUi = setupRegions({ ol, map, el, measures: MEASURES, areaAt, level: () => activeLevel(), state: () => choice.state })
   findWhereUi = setupFindWhere({ ol, map, el, measures: MEASURES, level: () => activeLevel(), state: () => choice.state, saveRegion: (name, lv, st, ids) => regionsUi.add(name, lv, st, ids) })
   radiusUi = setupRadius({ ol, map, el, measures: MEASURES, state: () => choice.state, built: () => builtStates })
-  setupPoints({ ol, map, el }).catch(() => {})
+  // The dot layers are files under data/points/: a hosted copy without them has no panel and asks for nothing.
+  if (!SITE || SITE.folders.includes('points')) setupPoints({ ol, map, el }).catch(() => {})
   notesUi = setupNotes({ ol, map, el, view: currentView, show: showView, picture: mapPicture, basemapOn: () => basemap.getVisible() })
   uploadUi = setupUpload({
     el,
@@ -679,50 +681,7 @@ document.getElementById('dl-r').addEventListener('click', () => {
   save(downloadName('R', l), new Blob([toRScript(columns, rows, { title: `${measure.label}, ${LEVEL_NAMES[l.level]}, state ${choice.state}`, notices: mapNotices(measure, LEVEL_NAMES[l.level], choice.state) })], { type: 'text/plain;charset=utf-8' }))
 })
 
-const ADDRESSES = 'husky-explorer-craft-addresses'
-const savedAddresses = () => {
-  try {
-    return JSON.parse(localStorage.getItem(ADDRESSES) ?? '{}')
-  } catch {
-    return {}
-  }
-}
-function showAddress() {
-  document.getElementById('send-address').value = savedAddresses()[document.getElementById('send-to').value] ?? ''
-}
-document.getElementById('send-to').addEventListener('change', showAddress)
-showAddress()
-
-document.getElementById('send-go').addEventListener('click', async () => {
-  const status = document.getElementById('send-status')
-  const { l, values } = mapValues()
-  if (!values.size) return void (status.textContent = 'Nothing is drawn to send.')
-  const receiver = RECEIVERS.find((r) => r.id === document.getElementById('send-to').value)
-  const address = document.getElementById('send-address').value.trim()
-  let as = document.getElementById('send-as').value
-  if (!receiver.takes.includes(as)) as = receiver.takes[0]
-  if (!isLoopbackAddress(address)) return void (status.textContent = 'Paste the address from that Craft’s window: it must start with http://127.0.0.1, http://localhost or http://[::1].')
-  try {
-    localStorage.setItem(ADDRESSES, JSON.stringify({ ...savedAddresses(), [receiver.id]: address }))
-  } catch {
-    // Storage blocked: the address is not remembered.
-  }
-  const notes = mapNotices(measure, LEVEL_NAMES[l.level], choice.state)
-  const grid = mapTable(measure, values)
-  const fileBase = downloadName('', l).replace(/\.$/, '')
-  const message =
-    as === 'layer'
-      ? layerMessage({ fileName: `${fileBase}.geojson`, name: measure.label, geojson: mapGeoJson(measure, await loadGeometry(l.level, choice.state, vintage), values, notes), source: 'Husky Explorer', notices: notes })
-      : tableMessage({ fileName: `${fileBase}.csv`, csv: mapCsv(mapGrid(measure, values, notes)), columns: grid.columns, notices: notes, geography: { level: l.level, state: choice.state } })
-  status.textContent = `Opening ${receiver.name}… (waiting up to 20 seconds for it to answer)`
-  const result = await sendToCraft({ address, receiver, message })
-  if (result === 'sent') status.textContent = `Sent to ${receiver.name}: ${as === 'layer' ? 'shapes with values' : 'a table'}. Nothing was saved to your computer.`
-  else if (result === 'blocked') status.textContent = 'The browser blocked the new window. Allow pop-ups for this page and try again.'
-  else {
-    status.textContent = `${receiver.name} did not answer in 20 seconds (the address may be wrong, or it may not take data from Husky Explorer yet). I saved the file instead: open it in ${receiver.name}.`
-    document.getElementById(as === 'layer' ? 'dl-geojson' : 'dl-csv').click()
-  }
-})
+if (!SITE) import('./handoff-ui.js').then((m) => m.setupHandoff({ mapValues, measure: () => measure, vintage: () => vintage, choice, downloadName }))
 
 // For checking in a browser console or an automated test.
 window.huskyExplorer = { map, levels, choice, recolor, showState }

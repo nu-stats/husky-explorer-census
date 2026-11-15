@@ -6,6 +6,7 @@ import { openText } from './open-file.js'
 import { loadIndex, loadTable } from './lib/data.js'
 import { parseCsv, uploadTable } from './lib/join.js'
 import { aggregate, aggregatedTables, aggregateRecipe, guessKind, KINDS, upLevels } from './lib/aggregate.js'
+import { SITE } from './lib/site.js'
 import { applyReading, explain, LEVEL_GUIDE, levelWord, numericColumns, readings, recipe, unmatchedCsv } from './lib/match.js'
 
 // The levels whose areas and names the assistant checks the file against, for the state chosen on the map.
@@ -48,7 +49,8 @@ export function setupUpload({ el, knownIds, state, apply }) {
   // The reference card: what each level is, how big, what its ID looks like.
   el('level-guide').innerHTML =
     '<table class="census"><thead><tr><th scope="col">Level</th><th scope="col">ID</th><th scope="col">Example</th><th scope="col">How many</th></tr></thead><tbody>' +
-    LEVEL_GUIDE.map((l) => `<tr><th scope="row">${esc(l.name)}</th><td>${esc(l.ids)}</td><td>${esc(l.example)}</td><td>${esc(l.size)}</td></tr><tr><td colspan="4" class="note">${esc(l.note)}</td></tr>`).join('') +
+    // A site that leaves a level out (block groups) does not describe it.
+    LEVEL_GUIDE.filter((l) => !SITE?.dropLevels?.includes(l.level)).map((l) => `<tr><th scope="row">${esc(l.name)}</th><td>${esc(l.ids)}</td><td>${esc(l.example)}</td><td>${esc(l.size)}</td></tr><tr><td colspan="4" class="note">${esc(l.note)}</td></tr>`).join('') +
     '</tbody></table>'
 
   async function context() {

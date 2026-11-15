@@ -59,7 +59,7 @@ function chosenPlaces() {
       if (!ids.includes(geoid)) ids.push(geoid)
     } else unknown = text
   }
-  el('status').textContent = unknown ? `“${unknown}” is not a place in the list. Pick one from the suggestions.` : ''
+  el('status').textContent = unknown ? `“${unknown}” is not in the list. Pick one from the suggestions.` : ''
   return ids
 }
 

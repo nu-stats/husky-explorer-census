@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/husky-explorer-census/icon.svg" type="image/svg+xml">
 <title>Agency report card · Husky Explorer</title>
 <link rel="stylesheet" href="/husky-explorer-census/style.css">
 <link rel="stylesheet" href="/husky-explorer-census/compare.css">
@@ -17,7 +18,6 @@
   .s-none { background: #e8e8ee; color: #444; }
   #todo li { margin-bottom: 6px; }
 </style>
-<style>.moe-note{display:none}</style>
 </head>
 <body class="compare">
 <header>
@@ -25,7 +25,7 @@
     <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#c8102e"/><path d="M16 6.5 25.5 12 16 17.5 6.5 12z" fill="#fff"/><path d="m6.5 16.5 9.5 5.5 9.5-5.5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".8"/><path d="m6.5 21 9.5 5.5L25.5 21" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/></svg>
     <b>Husky <span>Explorer</span></b><small class="tagline">An open alternative to Social Explorer</small>
   </a>
-  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html">Place profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/crime-data.html">Using crime data</a><a href="/husky-explorer-census/campus.html">Campus crime</a><a href="/husky-explorer-census/agency-report.html" aria-current="page">Agency report card</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
+  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html">Location profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare locations</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/crime-data.html">Using crime data</a><a href="/husky-explorer-census/campus.html">Campus crime</a><a href="/husky-explorer-census/agency-report.html" aria-current="page">Agency report card</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
 </header>
 <div id="page">
   <section id="controls">
@@ -53,8 +53,8 @@
       <ul id="todo"></ul>
       <h3>Year by year</h3>
       <table id="years"><thead><tr><th>Year</th><th>Status</th><th class="n">Months sent</th><th class="n">Months with incidents</th><th class="n">Incidents</th><th class="n">Per 1,000 residents</th><th class="n">State median</th><th class="n">FBI-published violent</th><th class="n">FBI-published property</th><th>Notes</th></tr></thead><tbody></tbody></table>
-      <p><button id="csv" type="button">Download as CSV</button> · Check a file against the FBI rules</p>
-      <p class="note">These are screens, not verdicts. A department can send little because little happened, or because its records system was changing. Incidents are from the FBI’s incident-based files; the published counts are the FBI’s <i>Crime in the United States</i> city tables. Departments that report only in the older summary system show no incident-based data. Read <a href="/husky-explorer-census/crime-data.html">Using crime data</a>Survey data<a href="/husky-explorer-census/campus.html">Campus crime</a> before drawing conclusions.</p>
+      <p><button id="csv" type="button">Download as CSV</button></p>
+      <p class="note">These are screens, not verdicts. A department can send little because little happened, or because its records system was changing. Incidents are from the FBI’s incident-based files; the published counts are the FBI’s <i>Crime in the United States</i> city tables. Departments that report only in the older summary system show no incident-based data. Read <a href="/husky-explorer-census/crime-data.html">Using crime data</a> and <a href="/husky-explorer-census/campus.html">Campus crime</a> before drawing conclusions.</p>
       <p class="note" id="notice"></p>
     </div>
   </section>

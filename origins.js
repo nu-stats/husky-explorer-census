@@ -2,6 +2,7 @@
 // national refugee table. Everything is read from the files the build wrote.
 import { loadIndex, loadTable } from './lib/data.js'
 import { formatMoe, formatValue, SHOW_MOE } from './lib/format.js'
+import { SITE } from './lib/site.js'
 import { countryColumns, topOrigins } from './lib/origins.js'
 
 const el = (id) => document.getElementById(id)
@@ -99,7 +100,8 @@ async function start() {
   await showBorn().catch(fail)
   el('state').addEventListener('change', () => fillCounties().then(showBorn).catch(fail))
   el('county').addEventListener('change', () => showBorn().catch(fail))
-  await showRefugees()
+  // A hosted copy that does not hold the national refugee file has no such block and does not ask for it.
+  if (!SITE || SITE.national.includes('us-refugees.json')) await showRefugees()
 }
 
 start().catch(fail)

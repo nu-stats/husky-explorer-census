@@ -1,5 +1,7 @@
 // The agency report card page: one police department, year by year, from the built FBI tables. Nothing is sent anywhere.
 import { esc } from './lib/chart.js'
+import { holds } from './lib/coverage.js'
+import { SITE } from './lib/site.js'
 import { agencyReport, reportCsv } from './lib/agency-report.js'
 import { fetchData, loadIndex, loadTable } from './lib/data.js'
 import { normalizeName } from './lib/match.js'
@@ -16,6 +18,7 @@ let current = null
 const num = (v, digits = 0) => (v === null || v === undefined ? '' : v.toLocaleString('en-US', { maximumFractionDigits: digits }))
 
 async function tryTable(dataset, table, level, state) {
+  if (!(await holds(dataset, level, state))) return null
   try {
     return await loadTable(dataset, table, level, state)
   } catch {
@@ -49,8 +52,19 @@ function publishedFor(id) {
   return null
 }
 
+// A hosted copy offers a kind of area only for states it holds files for (towns are built for some states only).
+async function offerLevels() {
+  const state = el('state').value
+  for (const level of ['place', 'cousub']) {
+    const option = el('level').querySelector(`option[value="${level}"]`)
+    option.hidden = option.disabled = !((await holds('nibrs-reporting', level, state)) || (await holds('cius-2025', level, state)))
+  }
+  if (el('level').selectedOptions[0]?.disabled) el('level').value = 'agency'
+}
+
 async function loadAgencies() {
   const state = el('state').value
+  if (SITE) await offerLevels()
   const level = el('level').value
   el('agencies').replaceChildren()
   names.clear()
