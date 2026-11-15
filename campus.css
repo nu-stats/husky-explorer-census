@@ -1,0 +1,30 @@
+/* Campus crime page; the shared look is in style.css and compare.css. */
+#map { height: 300px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+#results { list-style: none; margin: 8px 0 0; padding: 0; max-height: 260px; overflow: auto; }
+#results li button { display: block; width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--line); padding: 7px 4px; cursor: pointer; color: var(--text); font: inherit; }
+#results li button:hover, #results li button:focus-visible { background: var(--panel); }
+#results small { display: block; color: var(--muted); }
+#legend .sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin: 0 4px 0 10px; vertical-align: baseline; }
+#report #school h3 { margin: 22px 0 8px; font-size: 1.02rem; }
+#table table, #change table { width: 100%; border-collapse: collapse; }
+#table td, #change td { text-align: right; vertical-align: top; }
+#table td:first-child, #change td:first-child { text-align: left; }
+#table .group th, #change .group th { text-align: left; background: var(--panel); padding: 6px 10px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .04em; }
+.rate { display: block; font-size: 0.72rem; color: var(--muted); font-weight: 400; }
+.none { color: var(--muted); }
+.flag { border-left: 4px solid var(--accent); background: var(--panel); padding: 8px 12px; margin: 8px 0; font-size: 0.9rem; }
+.small { font-size: 0.78rem; color: var(--muted); display: block; font-weight: 400; }
+#chart svg { width: 100%; height: auto; max-width: 720px; color: var(--text); }
+#chart .axis { stroke: currentColor; stroke-opacity: .35; }
+#chart .grid { stroke: currentColor; stroke-opacity: .12; }
+#chart .line { fill: none; stroke: #1f77b4; stroke-width: 2; }
+#chart .dot { fill: #1f77b4; }
+#chart .break { stroke: #c8102e; stroke-dasharray: 4 3; }
+#chart text { fill: currentColor; font-size: 11px; }
+#cautions li { margin: 6px 0; }
+@media (max-width: 900px) { #map { height: 240px; } }
+#table table { margin: 10px 0 14px; }
+#table details { margin: 10px 0; }
+#table summary { cursor: pointer; font-weight: 600; padding: 6px 0; }
+#table th.lbl, #change th.lbl { text-align: left; font-weight: 500; color: var(--text); font-size: 0.9rem; }
+#table th[scope="col"]:not(:first-child), #change th[scope="col"]:not(:first-child) { text-align: right; }

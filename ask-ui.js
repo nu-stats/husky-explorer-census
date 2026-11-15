@@ -3,6 +3,7 @@
 // and a set of menus they can change, and nothing is drawn until they press
 // "Yes, show it".
 import { check, describe, interpret } from './lib/ask.js'
+import { SITE } from './lib/site.js'
 
 const make = (tag, props = {}, ...kids) => {
   const e = Object.assign(document.createElement(tag), props)
@@ -117,7 +118,7 @@ export function setupAsk({ measures, built, loadCounties, apply }) {
             { label: 'Cities and places', value: 'place' },
             { label: 'Tracts', value: 'tract' },
             { label: 'Block groups', value: 'blockgroup' },
-          ],
+          ].filter((o) => !SITE?.dropLevels?.includes(o.value)),
           request.level,
           (v) => {
             request.level = v

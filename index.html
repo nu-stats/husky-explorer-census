@@ -6,15 +6,14 @@
 <title>Husky Explorer</title>
 <link rel="stylesheet" href="/husky-explorer-census/vendor/ol.css">
 <link rel="stylesheet" href="/husky-explorer-census/style.css">
-<style>#ask{display:none!important}</style>
 </head>
 <body>
 <header>
   <a class="brand" href="/husky-explorer-census/" aria-label="Husky Explorer home">
     <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#c8102e"/><path d="M16 6.5 25.5 12 16 17.5 6.5 12z" fill="#fff"/><path d="m6.5 16.5 9.5 5.5 9.5-5.5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".8"/><path d="m6.5 21 9.5 5.5L25.5 21" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/></svg>
-    <b>Husky <span>Explorer</span></b>
+    <b>Husky <span>Explorer</span></b><small class="tagline">An open alternative to Social Explorer</small>
   </a>
-  <nav><a href="/husky-explorer-census/" aria-current="page">Map</a><a href="/husky-explorer-census/profile.html">Place profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
+  <nav><a href="/husky-explorer-census/" aria-current="page">Map</a><a href="/husky-explorer-census/profile.html">Place profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/crime-data.html">Using crime data</a><a href="/husky-explorer-census/campus.html">Campus crime</a><a href="/husky-explorer-census/agency-report.html">Agency report card</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
 </header>
 <main>
   <div id="stage">
@@ -45,6 +44,13 @@
       </section>
       <section id="controls" class="card">
         <h2>Map</h2>
+        <label>Showing <select id="measure"></select></label>
+        <details id="multi" open>
+          <summary>Pick several measures for a report</summary>
+          <p class="note">Click shows one on the map. Ctrl-click (Cmd-click on a Mac) adds or removes one; Shift-click takes everything from the last click. Arrow keys, Space and Ctrl+A work too.</p>
+          <div id="measure-list" class="pick-list" aria-label="Measures"></div>
+          <p><span id="map-pick-count" class="note"></span> <a id="map-report" href="/husky-explorer-census/report.html">Build a report from the picked measures</a></p>
+        </details>
         <div class="pair">
           <label>State <select id="state"></select></label>
           <label>Areas
@@ -59,13 +65,6 @@
             </select>
           </label>
         </div>
-        <label>Showing <select id="measure"></select></label>
-        <details id="multi" open>
-          <summary>Pick several measures for a report</summary>
-          <p class="note">Click shows one on the map. Ctrl-click (Cmd-click on a Mac) adds or removes one; Shift-click takes everything from the last click. Arrow keys, Space and Ctrl+A work too.</p>
-          <div id="measure-list" class="pick-list" aria-label="Measures"></div>
-          <p><span id="map-pick-count" class="note"></span> <a id="map-report" href="/husky-explorer-census/report.html">Build a report from the picked measures</a></p>
-        </details>
         <div class="pair">
           <label>Classes
             <select id="method">
@@ -113,6 +112,14 @@
       <p class="note">StatCraft and RCraft take a file for now:</p>
       <p><button type="button" id="dl-dta">Stata file (.dta)</button> <button type="button" id="dl-r">R script</button></p>
       <p id="send-status" class="note" role="status" aria-live="polite"></p>
+    </details>
+    <details id="findwhere" class="card">
+      <summary>Find where</summary>
+      <p class="note">Find the areas on the map that meet every cutoff you set, such as poverty at least 20 percent and median income at most $60,000. Uses the level and state shown on the map.</p>
+      <div id="fw-rows"></div>
+      <p><button type="button" id="fw-add">Add a cutoff</button> <button type="button" id="fw-go" class="primary">Find areas</button> <button type="button" id="fw-clear" class="link">Clear</button></p>
+      <p id="fw-status" class="note" role="status" aria-live="polite"></p>
+      <div id="fw-result"></div>
     </details>
     <details id="regions" class="card">
       <summary>Custom regions</summary>
@@ -182,6 +189,7 @@
 </main>
 <footer>
   <p>This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.</p>
+  <p>Husky Explorer is an independent, clean-room project and is not affiliated with or endorsed by Social Explorer.</p>
   <details id="notices">
     <summary>Data sources and credits</summary>
     <p>Health measures: Centers for Disease Control and Prevention, PLACES 2025 release (public domain). These are modeled small-area estimates of the percent of adults, not counts.</p>

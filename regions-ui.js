@@ -139,6 +139,15 @@ export function setupRegions({ ol, map, el, measures, areaAt, level, state }) {
     say(`Saved “${name}”.`)
   })
 
+  // Saves a set of areas found elsewhere (the Find where panel) as a named region, replacing one of the same name.
+  function add(name, lv, st, ids) {
+    const clean = name.trim() || `Region ${regions.length + 1}`
+    regions = [...regions.filter((x) => x.name !== clean), { name: clean, level: lv, state: st, ids: [...ids] }]
+    save()
+    list()
+    return clean
+  }
+
   function list() {
     const ul = el('region-list')
     ul.replaceChildren()
@@ -245,5 +254,5 @@ export function setupRegions({ ol, map, el, measures, areaAt, level, state }) {
   })
 
   list()
-  return { busy: () => picking || !!drawing }
+  return { busy: () => picking || !!drawing, add }
 }

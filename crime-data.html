@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using crime data · Husky Explorer</title>
+<link rel="stylesheet" href="/husky-explorer-census/style.css">
+<link rel="stylesheet" href="/husky-explorer-census/compare.css">
+</head>
+<body class="compare">
+<header>
+  <a class="brand" href="/husky-explorer-census/" aria-label="Husky Explorer home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#c8102e"/><path d="M16 6.5 25.5 12 16 17.5 6.5 12z" fill="#fff"/><path d="m6.5 16.5 9.5 5.5 9.5-5.5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".8"/><path d="m6.5 21 9.5 5.5L25.5 21" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/></svg>
+    <b>Husky <span>Explorer</span></b><small class="tagline">An open alternative to Social Explorer</small>
+  </a>
+  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html">Place profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/crime-data.html" aria-current="page">Using crime data</a><a href="/husky-explorer-census/campus.html">Campus crime</a><a href="/husky-explorer-census/agency-report.html">Agency report card</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
+</header>
+<div id="page">
+  <section id="controls">
+    <h2>Read this before you use crime numbers</h2>
+    <ol id="warning"></ol>
+    <p class="note">The same cautions travel with every crime download.</p>
+  </section>
+  <section id="report">
+    <h2>Using crime data</h2>
+    <p>Husky Explorer shows crime numbers from the FBI’s Uniform Crime Reporting program because they are free, national and go down to the police department. They are also easy to misuse. This page says what they are, then points to the research that explains their limits and to work that has used them, from people other than the FBI.</p>
+    <h3>Known issues with the data in Husky Explorer</h3>
+    <p class="note">What we found while building these measures, so you know what a number can and cannot tell you. Dated 2 November 2026.</p>
+    <ol id="issues"></ol>
+    <h3>Research on the limits of these data</h3>
+    <ul id="limits"></ul>
+    <h3>Work that has used these data</h3>
+    <p class="note">Listing a study does not endorse it. Where others have examined a study’s data, that is said.</p>
+    <ul id="used"></ul>
+    <h3>Background from other sources</h3>
+    <ul id="background"></ul>
+    <h3>Where the numbers come from in Husky Explorer</h3>
+    <p>The <a href="/husky-explorer-census/sources.html">Data sources</a> page lists every crime measure with its source, boundaries and credit, and links to independent descriptions of each. A teaching lesson on the strengths and limits of the Uniform Crime Reports, including how the FBI handles missing data, is in the repository’s <code>course/</code> folder.</p>
+    <div id="notices"><p>This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.</p></div>
+  </section>
+</div>
+<script type="module" src="/husky-explorer-census/crime-data.js"></script>
+</body>
+</html>

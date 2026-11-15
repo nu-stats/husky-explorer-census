@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus crime reports · Husky Explorer</title>
+<link rel="stylesheet" href="/husky-explorer-census/style.css">
+<link rel="stylesheet" href="/husky-explorer-census/compare.css">
+<link rel="stylesheet" href="/husky-explorer-census/campus.css">
+<link rel="stylesheet" href="/husky-explorer-census/vendor/ol.css">
+</head>
+<body class="compare">
+<header>
+  <a class="brand" href="/husky-explorer-census/" aria-label="Husky Explorer home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#c8102e"/><path d="M16 6.5 25.5 12 16 17.5 6.5 12z" fill="#fff"/><path d="m6.5 16.5 9.5 5.5 9.5-5.5" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".8"/><path d="m6.5 21 9.5 5.5L25.5 21" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/></svg>
+    <b>Husky <span>Explorer</span></b><small class="tagline">An open alternative to Social Explorer</small>
+  </a>
+  <nav><a href="/husky-explorer-census/">Map</a><a href="/husky-explorer-census/profile.html">Place profile</a><a href="/husky-explorer-census/report.html">Report builder</a><a href="/husky-explorer-census/compare.html">Compare places</a><a href="/husky-explorer-census/tables.html">Data tables</a><a href="/husky-explorer-census/origins.html">Where people come from</a><a href="/husky-explorer-census/commute.html">Commuting</a><a href="/husky-explorer-census/crime-data.html">Using crime data</a><a href="/husky-explorer-census/campus.html" aria-current="page">Campus crime</a><a href="/husky-explorer-census/agency-report.html">Agency report card</a><a href="/husky-explorer-census/sources.html">Data sources</a></nav>
+</header>
+<div id="page">
+  <section id="controls">
+    <h2>Find a college or university</h2>
+    <label for="q">Type a name, a city or a state
+      <input id="q" type="search" autocomplete="off" placeholder="Northeastern, or Boston MA" aria-controls="results">
+    </label>
+    <ul id="results" aria-live="polite"></ul>
+    <h2>Or pick it on the map</h2>
+    <div id="map" role="application" aria-label="Map of colleges and universities. Use the search box for a keyboard route."></div>
+    <p class="note" id="legend"></p>
+    <p id="status" role="status"></p>
+  </section>
+  <section id="report">
+    <div id="intro">
+      <h2>Campus crime reports</h2>
+      <p>Colleges and universities that take federal student aid must report each year how many crimes were reported to campus officials and police, by kind of crime and by place (on campus, residence halls, noncampus buildings, public property). The U.S. Department of Education publishes the counts. Pick a school to see its counts for a year, how they changed from its earliest to its latest report, and the trend.</p>
+      <p><b>These are counts of crimes reported, not all crime, and schools are not comparable.</b> Read the cautions before you use a number; they are repeated beside every table.</p>
+      <div id="cautions-intro"></div>
+    </div>
+    <div id="school" hidden>
+      <h2 id="name"></h2>
+      <p id="facts" class="note"></p>
+      <div id="flags"></div>
+      <div class="actions">
+        <label for="campus" id="campus-label" hidden>Show <select id="campus"></select></label>
+        <label for="year">Year <select id="year"></select></label>
+        <button id="csv" type="button">Download all years (CSV)</button>
+      </div>
+      <h3 id="table-title"></h3>
+      <p class="note" id="enroll"></p>
+      <div id="table"></div>
+      <h3>Change from the earliest to the latest year</h3>
+      <label for="place">Place <select id="place"></select></label>
+      <p class="note" id="change-note"></p>
+      <div id="change"></div>
+      <h3>Compare two years</h3>
+      <p class="note">Pick any two years the school reported, and a place. The table and the graph show every kind of crime with a report in either year; download either one.</p>
+      <div class="actions">
+        <label for="ya">From <select id="ya"></select></label>
+        <label for="yb">To <select id="yb"></select></label>
+        <label for="cmp-place">Place <select id="cmp-place"></select></label>
+        <label for="cmp-unit">Show <select id="cmp-unit"><option value="count">Reports (count)</option><option value="rate">Reports per 1,000 students</option></select></label>
+      </div>
+      <div class="actions">
+        <button id="cmp-csv" type="button">Download table (CSV)</button>
+        <button id="cmp-png" type="button">Download graph (PNG)</button>
+        <button id="cmp-svg" type="button">Download graph (SVG)</button>
+      </div>
+      <p class="note" id="cmp-note" role="status"></p>
+      <div id="cmp-chart"></div>
+      <div id="cmp-table"></div>
+      <h3>Trend</h3>
+      <div class="actions">
+        <label for="cat">Kind of crime <select id="cat"></select></label>
+        <label for="unit">Show <select id="unit"><option value="count">Reports (count)</option><option value="rate">Reports per 1,000 students</option></select></label>
+      </div>
+      <div id="chart"></div>
+      <p class="note" id="chart-note"></p>
+      <h3>Before you use these numbers</h3>
+      <ol id="cautions"></ol>
+    </div>
+    <p class="note">Source: U.S. Department of Education, Office of Postsecondary Education, Campus Safety and Security data (<a href="https://ope.ed.gov/campussafety/" rel="noopener noreferrer">ope.ed.gov/campussafety</a>); school locations from the National Center for Education Statistics, IPEDS. Husky Explorer is not endorsed by either. See <a href="/husky-explorer-census/sources.html">Data sources</a> and <a href="/husky-explorer-census/crime-data.html">Using crime data</a>Survey data.</p>
+  </section>
+</div>
+<script src="/husky-explorer-census/vendor/ol.js"></script>
+<script type="module" src="/husky-explorer-census/campus.js"></script>
+</body>
+</html>

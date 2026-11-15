@@ -15,7 +15,7 @@ const heat = HEAT_MEASURES.filter((m) => isCleared(m.source === 'prism' ? 'wetbu
 const rows = catalogRows(MEASURES, heat, { ...LEVEL_NAMES, state: 'state' })
 
 const held = document.createElement('section')
-if (SITE) held.innerHTML = `<h3>What this site holds</h3><p class="note">${esc(SITE.title)}. It holds U.S. Census Bureau data for every county, town, tract, block group and ZIP code area it was built for, and for the cities of the assignment (cities and places are limited to that list), with federal sources whose terms are clear: the measures listed here and the dot layers below. Husky Explorer’s crime, campus crime and survey data are not on this site.</p>`
+if (SITE) held.innerHTML = `<h3>What this site holds</h3><p class="note">${esc(SITE.title)}. It holds U.S. Census Bureau data for every county, town, tract, block group and ZIP code area it was built for, and for the cities of the assignment (cities and places are limited to that list). It also holds crime data: the FBI’s public files (reported crime, police employees, incident-based reporting) and campus crime. Nothing else is on this site: no other federal sources, no national surveys, and no restricted data.</p>`
 else held.innerHTML = `<h3>Held back until the terms are confirmed</h3><p class="note">These sources are not on the hosted site. The American Time Use Survey shows on the Survey data page on your own computer only, as a preview for checking.</p><ul class="note" style="color:#888">${[...HELD_BACK, ...HELD_BACK_NATIONAL].map((d) => `<li>${esc(d.name)}: ${esc(d.why)}</li>`).join('')}</ul>`
 el('catalog').after(held)
 

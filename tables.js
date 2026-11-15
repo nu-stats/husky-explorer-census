@@ -60,17 +60,12 @@ function drawTables() {
   picker.select(pick.picked)
 }
 
-// The kinds of area the state was built at, shown from the start so the choice is never hidden; the one picked is kept
-// when the state changes, if that state has it too.
 function drawLevels() {
   const state = el('state').value
   const have = index[state]?.levels ?? []
-  const was = el('level').value
-  const levels = LEVEL_ORDER.filter((l) => have.includes(l))
-  el('level').innerHTML = levels.map((l) => `<option value="${l}">${esc(l === 'state' ? 'the state as a whole' : LEVEL_PLURALS[l] ?? LEVEL_NAMES[l])}</option>`).join('')
-  el('level').value = levels.includes(was) ? was : levels.includes('county') ? 'county' : levels[0]
+  const levels = LEVEL_ORDER.filter((l) => have.includes(l) && (l !== 'state' || pick.source?.startsWith('acs1')))
+  el('level').innerHTML = levels.map((l) => `<option value="${l}">${esc(l === 'state' ? 'state' : LEVEL_NAMES[l])}</option>`).join('')
 }
-const LEVEL_PLURALS = { county: 'counties', cousub: 'towns and townships', place: 'cities and places', zcta: 'ZIP code areas', tract: 'tracts', blockgroup: 'block groups' }
 
 function choosePicked() {
   pick.grid = null
@@ -78,11 +73,8 @@ function choosePicked() {
   el('step3').hidden = !pick.picked.length
   const tables = pickedTables()
   el('chosen').textContent = tables.length === 1 ? `${tables[0].id}: ${tables[0].concept}` : `${tables.length} tables: ${tables.map((t) => t.id).join(', ')}`
+  drawLevels()
 }
-
-// A 2010 or 2000 count filed a second time under a town's or city's current code (its code changed, its land did not) is
-// left out of the table, so every area is counted once in the download.
-const ownRows = (file) => ({ ...file, rows: Object.fromEntries(Object.entries(file.rows).filter(([, r]) => !r.also)) })
 
 const pickedTables = () => pick.catalog.tables.filter((t) => pick.picked.includes(t.id))
 
@@ -95,7 +87,7 @@ async function show() {
   for (const table of pickedTables()) {
     try {
       const t = await loadTable(pick.source, table.id, level, state)
-      parts.push({ table, title: `${pick.catalog.label}: ${table.id} ${table.concept}`, grid: tableGrid(ownRows(t.file), table, el('area').value) })
+      parts.push({ table, title: `${pick.catalog.label}: ${table.id} ${table.concept}`, grid: tableGrid(t.file, table, el('area').value) })
     } catch {
       missing.push(table.id)
     }
@@ -128,12 +120,7 @@ el('state').onchange = () => {
   el('step2').hidden = true
   el('step3').hidden = true
   el('result').hidden = true
-  drawLevels()
   drawSources()
-}
-el('level').onchange = () => {
-  pick.grid = null
-  el('result').hidden = true
 }
 el('find').oninput = () => pick.catalog && drawTables()
 el('show').onclick = show
@@ -145,5 +132,4 @@ el('download').onclick = () => {
   URL.revokeObjectURL(a.href)
 }
 
-drawLevels()
 drawSources()

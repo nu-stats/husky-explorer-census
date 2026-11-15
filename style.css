@@ -205,8 +205,15 @@ body.all-states #radius, body.all-states #regions { display: none; }
 .pick-list [role="option"][aria-selected="true"] { background: var(--accent); color: #fff; }
 .pick-list [role="option"]:focus-visible { outline: 2px solid var(--text); outline-offset: -2px; }
 
+/* The line beside the app name in the header (hidden when the page is too narrow for it) */
+.brand .tagline { display: block; font-size: 12px; font-weight: 500; color: var(--muted); border-left: 1px solid var(--line); padding-left: 10px; max-width: 14ch; line-height: 1.2; }
+@media (max-width: 1280px) { .brand .tagline { display: none; } }
+
 /* The window that asks which file to use from a zip or tar archive (open-file.js). */
 dialog.pick-file { max-width: 32rem; background: var(--panel); color: var(--text); border: 1px solid var(--muted); border-radius: 6px; padding: 1rem 1.25rem; }
 dialog.pick-file ul { list-style: none; padding: 0; margin: 0.5rem 0 1rem; max-height: 50vh; overflow: auto; }
 dialog.pick-file li { margin: 0.25rem 0; }
 dialog.pick-file::backdrop { background: rgb(0 0 0 / 0.3); }
+
+.fw-row { margin: 0.5rem 0; display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
+.fw-row select { max-width: 100%; }
