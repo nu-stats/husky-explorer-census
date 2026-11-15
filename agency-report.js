@@ -1,7 +1,7 @@
 // The agency report card page: one police department, year by year, from the built FBI tables. Nothing is sent anywhere.
 import { esc } from './lib/chart.js'
 import { agencyReport, reportCsv } from './lib/agency-report.js'
-import { loadIndex, loadTable } from './lib/data.js'
+import { fetchData, loadIndex, loadTable } from './lib/data.js'
 import { normalizeName } from './lib/match.js'
 import { indexTable } from './lib/measures.js'
 
@@ -30,7 +30,7 @@ let crTown = null
 /** All agencies of a state, from the file with every agency type (ORI as the id). */
 async function loadAllAgencies(state) {
   try {
-    const res = await fetch(`/husky-explorer-census/data/nibrs-agencies/${state}.json`)
+    const res = await fetchData(`/husky-explorer-census/data/nibrs-agencies/${state}.json`)
     if (!res.ok) return null
     return indexTable(await res.json())
   } catch {

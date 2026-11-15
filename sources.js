@@ -69,8 +69,8 @@ Promise.all(NATIONAL_FILES.map((name) => fetch(`/husky-explorer-census/data/nati
   })
   .catch(() => {})
 
-// A site profile holds no campus data.
-;(SITE ? Promise.resolve(null) : fetch('/husky-explorer-census/data/campus/index.json'))
+// A site profile may leave campus crime out.
+;(SITE && !SITE.datasets.includes('campus') ? Promise.resolve(null) : fetch('/husky-explorer-census/data/campus/index.json'))
   .then((res) => (res?.ok ? res.json() : null))
   .then((file) => {
     const list = nationalRows(file ? { ...file, tables: file.categories.map((c) => ({ title: `${c.group}: ${c.label}` })) } : null)

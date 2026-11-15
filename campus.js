@@ -22,6 +22,7 @@ import {
   SEX_OFFENSE_IDS,
   tableForYear,
 } from './lib/campus.js'
+import { fetchData } from './lib/data.js'
 
 const el = (id) => document.getElementById(id)
 const count = (n) => n.toLocaleString('en-US')
@@ -49,7 +50,7 @@ async function load() {
 
 async function institution(id) {
   if (!cache.has(id)) {
-    const res = await fetch(`/husky-explorer-census/data/campus/inst/${encodeURIComponent(id)}.json`)
+    const res = await fetchData(`/husky-explorer-census/data/campus/inst/${encodeURIComponent(id)}.json`)
     if (!res.ok) throw new Error('That school’s file could not be read.')
     cache.set(id, await res.json())
   }
