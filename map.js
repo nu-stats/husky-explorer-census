@@ -4,6 +4,7 @@
 // boundaries are loaded the first time the map needs them.
 import { breakLabels, classIndex, classify, clipRange } from './lib/classify.js'
 import { setupAsk } from './ask-ui.js'
+import { SITE } from './lib/site.js'
 import { isLoopbackAddress, layerMessage, RECEIVERS, sendToCraft, tableMessage } from './lib/handoff.js'
 import { toDta } from './lib/dta.js'
 import { toRScript } from './lib/rscript.js'
@@ -582,7 +583,9 @@ async function start() {
   setBasemap(saved !== 'off')
   el('basemap').addEventListener('change', () => setBasemap(el('basemap').checked))
   builtStates = await loadIndex()
-  setupAsk({ measures: MEASURES, built: builtStates, loadCounties: countiesOf, apply: applyRequest })
+  // A site profile (a hosted copy with only some of the data) has no Explore box: its examples name measures the copy may not hold.
+  if (SITE) el('ask').remove()
+  else setupAsk({ measures: MEASURES, built: builtStates, loadCounties: countiesOf, apply: applyRequest })
   // The example buttons put their words in the box and ask; the person still confirms before anything is drawn.
   for (const chip of document.querySelectorAll('.chip')) {
     chip.addEventListener('click', () => {
